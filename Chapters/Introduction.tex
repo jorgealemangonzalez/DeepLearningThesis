@@ -1,0 +1,87 @@
+\chapter{Introduction}
+\section{The problem}
+Us \emph{homo sapiens} are notoriously proud of our intelligence. Intelligence
+is what allows us to handle the world we live in: understand our surroundings,
+predict the future, and manipulate it according to our will. What will happen
+if I move my hand to a pen and put my fingers around it? I will grasp it, and
+then using my muscles I will be able to use it.
+
+It is not at all obvious how we perform this process. Indeed, this question
+has been philosophised on for thousands of years. The field of \ac{AI} tries
+to go even further: researchers try understand how we think, in order to build
+machines that exhibit those same properties.
+
+Work on \ac{AI} famously started on the summer of 1956 at Dartmouth College.
+John McCarthy and others proposed that a ``2 month, 10 man study of artificial
+intelligence'' would make ``significant advance in one or more of [how to make
+machines use language, form abstractions and concepts, solve kinds of problems
+now reserved for humans, and improve themselves] if a carefully selected group
+of scientists work on it together for a summer''. \citep[Section~1.3]{russell2009aima}
+
+60 years later, we are still working on all of these problems. But this spark
+ignited the tinder, and people started working on all kinds of sub-problems:
+computer vision, robotics, machine learning, automatic reasoning, natural
+language processing\dots
+
+The one we are concerned about in this document is sequential decision-making.
+How might an agent take decisions, that have consequences, in a changing world?
+Much research in this topic has been done on classical games, such as checkers,
+chess and go, and on video games. These problems provide domains where actions
+have to be taken sequentially and have consequences on the future.
+
+One, important and recent, of such advances appeared in 2015 in Nature. The
+paper ``Human-level control through deep reinforcement learning''
+\citep{mnih2015human} proposed a neural algorithm that played many of the
+video-games in the Atari console, knowing only the buttons it has, the score and
+the image, just like a human player. Their key contribution is the \ac{DQN}
+algorithm, which is the successful application of deep convolutional neural
+networks (used in computer vision) as a function approximator for \ac{RL}.
+
+Of the Atari games, \acl{MR} is one that their agent has trouble playing. The
+problem with this game is the \emph{sparsity} of the rewards: it is almost
+impossible to get any positive feedback just by randomly hitting buttons on the
+console. To successfully get feedback, an agent has to understand the objects on
+the screen, understand what is their character and how does it move, and then
+purposefully plan a path to the rewards. Thus, the game has become infamous as
+difficult, and many \ac{RL} researchers are interested in it now.
+
+In this thesis we get around the problem of understanding the world by encoding
+our own, human, understanding in the machine. It is an exercise to find out how
+much must the machine know about the world, how few \emph{assumptions} must it
+make, in order to be successful in it.
+
+\section{Related Work}
+Two very relevant papers have been recently published. They both deal with
+methods intrinsic to the agent of obtaining more frequent feedback.
+
+The first, by
+\citet{kulkarni2016hierarchical}, proposes a hierarchical model
+(\ffref{sec:hierarchical-rl}) with two levels. The higher level, the
+\emph{meta-controller}, learns and decides towards which object of the screen
+the character should move, and the lower level, the \emph{controller} learns and
+decides how to get there. They encode the knowledge of which are plausible
+objects to move towards and where is their controllable character to the
+computational agent.
+
+Some of the objects are closer to the initial position than the objects that
+increase score in the game, so the controller can get some feedback and learn
+how to move. Once the controller can move between objects, the objects which
+produce reward are only a few abstract time steps away for the meta-controller,
+and it can successfully learn too. Work on replicating this paper is in
+progress.
+
+The second, by \citet{bellemare2016unifying}, deals with estimating how
+\emph{novel} (not to be confused with the novelty measure in
+\ffref{subsec:iw-the-algorithm}) a state is, even if the agent has never seen
+it. This is done by examining the components of the new state (like in
+\ffref{subsec:iterated-width}) and the number of occurrences of each previous
+component, and computing a single number synthesising that. Additional reward is
+then given to visited states, proportional to the square root of this measure.
+Thus, the learner is incentivised to visit new state areas, and eventually find
+the environment reward in them.
+
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "../report"
+%%% End: 

@@ -1,0 +1,94 @@
+\chapter{Figures enhanced. Learning revisited.}
+Since the presentation of this work on 25 July, 2016, it has been
+edited: most figures have been enhanced readability-wise, but its content is
+otherwise unchanged. In addition, the learning results have been improved by
+using a somewhat different methodology.
+
+The Sarsa agent that employs the options described in \ffref{sec:options}, the
+results of which are shown in \ffref{fig:with_options}, has been improved. The
+cause of its lack of success was indeed having too negative a reward in the
+direction we intended to nudge it, but that was not caused by inadequate
+options. Instead, the reason was that the discount rate was too low.
+
+The options skipped no frames ($frame\_skip=1$), as opposed to $frame\_skip=4$
+for the non-option version. Thus, the frequency of negative reinforcement by the
+shaping function increased, and caused the observed effect. To correct for that,
+we set the discount rate $\gamma=0.9995$, which is larger than $\sqrt[4]{0.995}$
+but close.
+
+The results can be seen in \ffref{fig:with_options_9995}. Observe that the
+rewards towards the end are much lower than in the option-less agent in
+\ffref{fig:without_options}. Also, the non-annealed agent has trouble finding
+the reward consistently in the beginning, but does find it within the first few
+thousand episodes.
+
+\drawtraining{with_options_9995}{Same as \ffref{fig:with_options}, but with
+  $\gamma=0.9995$. Annealed, blue uses $\varepsilon=\textsc{Max}(0.1, 0.7 -
+  10^{-4} \cdot n_e)$. Red uses $\varepsilon=0.1$.}
+
+Counter-intuitively, the agent was still learning more
+slowly with options than without. This seemed be in great part because of
+the relatively infrequent updates: the option-based agent updated the $Q$ table
+once per option, which usually last more than 10 frames, while the agent without
+options updated once every 4 frames.
+
+Accordingly, we changed the algorithm to update the action-value of an option
+every frame. Let the agent initiate an option $o_t$ at time $t$, which
+finishes at time $t+k$. Because of how we defined our options
+(\ffref{sec:options}), we know that for all $t'$ such that $t \leq t' < t+k$,
+$s_{t'} \in \mathcal{I}_{o_t}$. That is, an option can be started in any state
+that is reached when executing it. Thus, we can use the update in
+\ffref{eq:options-q-update} for all intermediate states $t'$:
+\begin{equation}
+  \begin{array}{c}
+  Q(s_t, o_t) \gets (1-\alpha)Q(s_t, o_t) + \alpha \left[r_{t:t+k} + \gamma^k
+Q(s_{t+k}, o_{t+k}) \right] \\
+Q(s_{t+1}, o_t) \gets (1-\alpha)Q(s_{t+1}, o_t) + \alpha \left[r_{t+1:t+k} +
+\gamma^{k-1} Q(s_{t+k}, o_{t+k}) \right] \\
+\dots \\
+Q(s_{t+k-1}, o_t) \gets (1-\alpha)Q(s_{t+k-1}, o_t) + \alpha \left[r_{t+k-1} +
+\gamma Q(s_{t+k}, o_{t+k}) \right]
+ \end{array}
+\end{equation}
+
+This algorithm is very similar to the forward view $k$-step return
+Sarsa($\lambda$) \citep[Sections~7.1,~7.2,~7.5]{sutton1998introduction}. In this
+case, $k$ is not necessarily equal every time an option is executed.
+
+The results of using this improvement can be seen in
+\ffref{fig:with_options_each_frame}. The blue agent, the best performing,
+achieves 0.5 more average reward per episode than the previously best performing
+option-less agent, in 1/25 the number of training episodes. It is worth noting
+that the option-less agent uses $\varepsilon=0.1$ in the end, compared to
+$\varepsilon=0.01$ from this agent, and that performing the wrong option has
+more far-reaching consequences than choosing the wrong action.
+
+\drawtraining{with_options_each_frame}{Reward per episode, averaged every 1000
+episodes, as the training progresses. Options are used. Red uses
+$\varepsilon=\textsc{Max}(0.01, 0.2 - 10^{-3} \cdot n_e)$, blue uses
+$\varepsilon=\textsc{Max}(0.01, 0.2 - 10^{-4} \cdot n_e)$, amber uses
+$\varepsilon=0.1$ and green uses $\varepsilon=0.05$. All use $\gamma=0.9995$.
+Darker lines, with higher value, do not include the shaping reward $F(\cdot)$;
+lighter lines show the reward as the agent experiences it. $y$ axis is reward,
+$x$ axis is thousands of episodes.}
+
+Seeing the success of this modification, we applied it back to the
+option-less agent. We framed each action with $frame\_skip=4$ as an option that
+takes the 1-frame action for 4 frames, and applied the same algorithm. The
+results can be seen in figure \ffref{fig:without_options_each_frame}. In general
+we observe that how fast the agent learns depends on the annealing rate, but the
+final performance depends only on the final $\varepsilon$.
+
+\drawtraining{without_options_each_frame}{Reward per episode, averaged every 1000
+episodes, as the training progresses. No options are used. Red uses
+$\varepsilon=\textsc{Max}(0.01, 0.7 - 10^{-4} \cdot n_e)$, blue uses
+$\varepsilon=\textsc{Max}(0.01, 0.7 - 5 \cdot 10^{-5} \cdot n_e)$, amber uses
+$\varepsilon=\textsc{Max}(0.1, 0.7 - 10^{-4} \cdot n_e)$ and green uses
+$\varepsilon=0.1$. All use $\gamma=0.9995$. Darker lines, with higher value, do
+not include the shaping reward $F(\cdot)$; lighter lines show the reward as the
+agent experiences it. $y$ axis is reward, $x$ axis is thousands of episodes.}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "../report"
+%%% End:

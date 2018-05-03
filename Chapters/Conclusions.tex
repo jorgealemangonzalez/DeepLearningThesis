@@ -1,0 +1,47 @@
+\chapter{Conclusions and Future Work}
+\section{Conclusions}
+First, we looked at the basics of \aclp{SDP}. We learned about basic \acl{RL}
+algorithms, and ways to make them learn better: shaping and options. We then
+looked at search methods, especially a promising planning algorithm, \acl{IW}.
+
+To apply this into practice, we reverse engineered some features of \acl{MR}.
+Using those, we crafted several methods to increase exploration, and modified
+\ac{IW} with them to perform very well, in this problem.
+
+We also found that reward shaping makes for fast and effective learning, and
+that options that do not fit well are worse than nothing.
+
+\section{Future work}
+Using planning, it was possible to find the sparse reward in the first screen
+from the beginning. An attractive research avenue would be to use experience
+acquired during planning to train a learning algorithm. Dyna-Q
+(\cite[Section~9.2]{sutton1998introduction}) is similar to this, but it would be
+interesting to use a better planning algorithm, and a learner with function approximation.
+
+To do planning, the agent needs a model of the world. Often that model, unlike
+in this case, is not readily available. One possible avenue of research would be
+to try and predict the next world state from the current state and a given action.
+
+One way to do that would be to use something similar to an \emph{autoencoder} to
+learn an abstracted representation of the state, and then try to predict the
+abstracted representation of the next state, as did \citet{oh2015action}.
+Ideally, that would be generalised over several platforming games, or a
+synthetic procedural environment that follows the laws of 2D physics.
+
+The learner could also be supervised to learn a high-level graph-like
+representation of the screen, showing ladders and platforms as edges and the
+places where they join as nodes, for example.
+
+Additional information for some of the above things could be had by adding
+features such as the current moving entities obtained, for example, with
+Gaussian mixture models of background \citep{stauffer1999adaptive}.
+
+Planning algorithms that prune on novelty of the state, based on \acl{IW}, maybe
+with the novelty measure in \citet{bellemare2016unifying}, could be ran on
+approximate tuples in the autoencoder's state representation space, which has
+lower dimensionality than the input.
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "../report"
+%%% End: 

@@ -1,0 +1,166 @@
+\documentclass[12pt,a4paper,twoside]{report}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage{setspace}
+\usepackage{amssymb,amsmath,amsfonts}
+\usepackage{graphicx}
+\usepackage{upquote} % quotes in verbatim environments
+\usepackage{fixme}
+\usepackage{microtype}
+\usepackage[tmargin=3cm, lmargin=3cm, rmargin=3cm, bmargin=3cm, marginparsep=0.3cm, marginparwidth=2.4cm]{geometry}
+\usepackage{hyperref}
+\usepackage{import}
+\usepackage{emptypage}
+\PassOptionsToPackage{usenames,dvipsnames}{color} % color is loaded by hyperref
+\hypersetup{unicode=true,
+            colorlinks=true,
+            linkcolor=black,
+            citecolor=black,
+            urlcolor=blue,
+            breaklinks=true}
+\urlstyle{same}  % don't use monospace font for urls
+\usepackage{parskip}
+\setlength{\emergencystretch}{3em}
+
+\usepackage{algorithm}
+\usepackage[end]{algpseudocode}
+\let\Algorithm\algorithm
+\renewcommand\algorithm[1][]{\Algorithm[#1]\setstretch{1.25}}
+
+\usepackage[plain]{fancyref}
+% Change references from capital/normal letters
+\newcommand{\ffref}{\Fref}
+% Algorithm and subsection references
+\newcommand*{\fancyrefalglabelprefix}{alg}
+\newcommand*{\fancyrefsubseclabelprefix}{subsec}
+\frefformat{plain}{\fancyrefalglabelprefix}{%
+algorithm\fancyrefdefaultspacing#1%
+}
+\Frefformat{plain}{\fancyrefalglabelprefix}{%
+Algorithm\fancyrefdefaultspacing#1%
+}
+\frefformat{plain}{\fancyrefsubseclabelprefix}{%
+subsection\fancyrefdefaultspacing#1%
+}
+\Frefformat{plain}{\fancyrefsubseclabelprefix}{%
+Subsection\fancyrefdefaultspacing#1%
+}
+\frefformat{vario}{\fancyrefalglabelprefix}{%
+algorithm\fancyrefdefaultspacing#1 on page~#2%
+}
+\Frefformat{vario}{\fancyrefalglabelprefix}{%
+Algorithm\fancyrefdefaultspacing#1 on page~#2%
+}
+\frefformat{vario}{\fancyrefsubseclabelprefix}{%
+subsection\fancyrefdefaultspacing#1 on page~#2%
+}
+\Frefformat{vario}{\fancyrefsubseclabelprefix}{%
+Subsection\fancyrefdefaultspacing#1 on page~#2%
+}
+
+\usepackage{algpseudocode}
+\algblockdefx[RepeatComment]{RepeatComment}{EndRepeatComment}
+    [1][]{\textbf{repeat} #1}
+    {\textbf{end repeat}}
+\algblockdefx[RepeatUntilComment]{RepeatUntilComment}{EndRepeatUntilComment}
+    [1][]{\textbf{repeat} #1}
+    [1][]{\textbf{until} #1}
+
+\usepackage{fancyhdr}
+\setlength{\headheight}{15pt}
+\fancyfoot{}
+\fancyhead{}
+\fancyhead[LE,RO]{\thepage}
+\fancyhead[RE]{\nouppercase{\leftmark}}
+\fancyhead[LO]{\nouppercase{\rightmark}}
+
+%% Bibtex
+\usepackage{csquotes}
+%\usepackage[nottoc,numbib]{tocbibind}
+\usepackage[numbib]{tocbibind}
+\usepackage[style=authoryear,bibencoding=ascii,backend=bibtex,natbib]{biblatex}
+\bibliographystyle{unsrt}
+\addbibresource{report.bib}
+
+%% Inkscape pdf_tex pictures
+\usepackage{calc}
+\def\svgscale{1}
+\newcommand{\inkscapefig}[2]{
+\begin{figure}[hbtp]
+\begin{center}
+  \subimport{img/}{#1.pdf_tex}
+\end{center}
+\caption{#2\label{fig:#1}}
+\end{figure}
+}
+
+\usepackage[final]{pdfpages}
+
+\usepackage{mfirstuc} % capitalisewords
+
+%\newcommand{\newconceptspec}[2]{\emph{#1}\marginpar{\footnotesize\textsc{#2}}}
+\newcommand{\newconceptspec}[2]{\emph{#1}}
+\newcommand{\newconcept}[1]{\newconceptspec{#1}{\capitalisewords{#1}}}
+\newcommand{\centeredtitle}[1]{ \phantomsection
+  \addcontentsline{toc}{chapter}{#1} \begin{center} {\Huge
+  \textbf{#1}} \end{center}\bigskip}
+\newcommand{\argmin}{\operatornamewithlimits{arg\,min}}
+\newcommand{\argmax}{\operatornamewithlimits{arg\,max}}
+
+\subimport{Content/}{Acronyms.tex}
+
+
+\begin{document}
+\pagenumbering{roman}
+\pagestyle{empty}
+\includepdf[pages={1}]{Content/cover.pdf}
+\cleardoublepage
+\input{Content/Title.tex}
+
+\onehalfspacing
+
+\cleardoublepage
+\input{Content/Acknowledgements.tex}
+
+\cleardoublepage
+\input{Content/Abstract.tex}
+
+\cleardoublepage
+%\lhead{Contents}
+\pagestyle{fancy}
+\tableofcontents
+
+%\cleardoublepage
+%\lhead{List of Figures}
+%\listoffigures
+
+%\cleardoublepage
+%%\lhead{List of Tables}
+%\listoftables
+
+\cleardoublepage
+\printacronyms[include-classes=abbrev,name=Abbreviations,heading=chapter*]
+\phantomsection
+\addcontentsline{toc}{chapter}{Abbreviations}
+
+\cleardoublepage
+\pagestyle{fancy}
+\pagenumbering{arabic}
+\input{Chapters/Introduction.tex}
+\cleardoublepage
+\input{Chapters/Theory.tex}
+\cleardoublepage
+\input{Chapters/Methodology.tex}
+\cleardoublepage
+\input{Chapters/Evaluation.tex}
+\cleardoublepage
+\input{Chapters/Conclusions.tex}
+
+\cleardoublepage
+\thispagestyle{empty}
+\printbibliography
+\addcontentsline{toc}{chapter}{Bibliography}
+
+\appendix
+\input{Chapters/Appendix1.tex}
+\end{document}

@@ -1,0 +1,526 @@
+% $ biblatex auxiliary file $
+% $ biblatex version 2.6 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated as
+% required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+\entry{adair2007montezuma}{misc}{}
+  \name{author}{1}{}{%
+    {{}%
+     {Adair}{A.}%
+     {Rob}{R.}%
+     {}{}%
+     {}{}}%
+  }
+  \strng{namehash}{AR1}
+  \strng{fullhash}{AR1}
+  \field{labelyear}{2007}
+  \field{sortinit}{A}
+  \field{booktitle}{The Atari Times.}
+  \field{howpublished}{\href{https://web.archive.org/web/20160611120254/http://www.ataritimes.com/index.php?ArticleIDX=592}{http://www.ataritimes.com/
+  \\ index.php?ArticleIDX=592}}
+  \field{note}{Last retrieved: \today. Link to Internet Archive.}
+  \field{title}{Montezuma's Revenge.}
+  \field{year}{2007}
+\endentry
+
+\entry{atarispec}{misc}{}
+  \field{sortinit}{A}
+  \field{howpublished}{\href{https://web.archive.org/web/20160313130915/http://problemkaputt.de/2k6specs.htm}{http://problemkaputt.de/2k6specs.htm}}
+  \field{note}{Last retrieved: \today. Link to Internet Archive. Author
+  pseudonym: ``Nocash''}
+  \field{title}{Atari 2600 Specifications}
+\endentry
+
+\entry{bellemare2013arcade}{article}{}
+  \name{author}{4}{}{%
+    {{}%
+     {{Bellemare}}{B.}%
+     {M.~G.}{M.~G.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {{Naddaf}}{N.}%
+     {Y.}{Y.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {{Veness}}{V.}%
+     {J.}{J.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {{Bowling}}{B.}%
+     {M.}{M.}%
+     {}{}%
+     {}{}}%
+  }
+  \strng{namehash}{BMG+1}
+  \strng{fullhash}{BMGNYVJBM1}
+  \field{labelyear}{2013}
+  \field{sortinit}{B}
+  \field{pages}{253\bibrangedash 279}
+  \field{title}{The Arcade Learning Environment: An Evaluation Platform for
+  General Agents}
+  \field{volume}{47}
+  \field{journaltitle}{Journal of Artificial Intelligence Research}
+  \field{month}{06}
+  \field{year}{2013}
+\endentry
+
+\entry{bellemare2016unifying}{article}{}
+  \name{author}{6}{}{%
+    {{}%
+     {Bellemare}{B.}%
+     {Marc~G}{M.~G.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Srinivasan}{S.}%
+     {Sriram}{S.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Ostrovski}{O.}%
+     {Georg}{G.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Schaul}{S.}%
+     {Tom}{T.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Saxton}{S.}%
+     {David}{D.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Munos}{M.}%
+     {Remi}{R.}%
+     {}{}%
+     {}{}}%
+  }
+  \strng{namehash}{BMG+2}
+  \strng{fullhash}{BMGSSOGSTSDMR1}
+  \field{labelyear}{2016}
+  \field{sortinit}{B}
+  \field{title}{Unifying Count-Based Exploration and Intrinsic Motivation}
+  \field{journaltitle}{arXiv preprint arXiv:1606.01868}
+  \field{year}{2016}
+\endentry
+
+\entry{kulkarni2016hierarchical}{article}{}
+  \name{author}{4}{}{%
+    {{}%
+     {Kulkarni}{K.}%
+     {Tejas~D}{T.~D.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Narasimhan}{N.}%
+     {Karthik~R}{K.~R.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Saeedi}{S.}%
+     {Ardavan}{A.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Tenenbaum}{T.}%
+     {Joshua~B}{J.~B.}%
+     {}{}%
+     {}{}}%
+  }
+  \strng{namehash}{KTD+1}
+  \strng{fullhash}{KTDNKRSATJB1}
+  \field{labelyear}{2016}
+  \field{sortinit}{K}
+  \field{title}{Hierarchical Deep Reinforcement Learning: Integrating Temporal
+  Abstraction and Intrinsic Motivation}
+  \field{journaltitle}{arXiv preprint arXiv:1604.06057}
+  \field{year}{2016}
+\endentry
+
+\entry{lipovetzky2012width}{inproceedings}{}
+  \name{author}{2}{}{%
+    {{}%
+     {Lipovetzky}{L.}%
+     {Nir}{N.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Geffner}{G.}%
+     {H{\'e}ctor}{H.}%
+     {}{}%
+     {}{}}%
+  }
+  \strng{namehash}{LNGH1}
+  \strng{fullhash}{LNGH1}
+  \field{labelyear}{2012}
+  \field{sortinit}{L}
+  \field{booktitle}{ECAI}
+  \field{pages}{540\bibrangedash 545}
+  \field{title}{Width and Serialization of Classical Planning Problems.}
+  \field{year}{2012}
+\endentry
+
+\entry{lipovetzky2015classical}{inproceedings}{}
+  \name{author}{3}{}{%
+    {{}%
+     {Lipovetzky}{L.}%
+     {Nir}{N.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Ramirez}{R.}%
+     {Miquel}{M.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Geffner}{G.}%
+     {Hector}{H.}%
+     {}{}%
+     {}{}}%
+  }
+  \strng{namehash}{LNRMGH1}
+  \strng{fullhash}{LNRMGH1}
+  \field{labelyear}{2015}
+  \field{sortinit}{L}
+  \field{booktitle}{Proc. International Joint Conference on Artificial
+  Intelligence (IJCAI-15)}
+  \field{title}{Classical planning with simulators: results on the Atari video
+  games}
+  \field{year}{2015}
+\endentry
+
+\entry{mnih2015human}{article}{}
+  \true{moreauthor}
+  \name{author}{10}{}{%
+    {{}%
+     {Mnih}{M.}%
+     {Volodymyr}{V.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Kavukcuoglu}{K.}%
+     {Koray}{K.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Silver}{S.}%
+     {David}{D.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Rusu}{R.}%
+     {Andrei~A}{A.~A.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Veness}{V.}%
+     {Joel}{J.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Bellemare}{B.}%
+     {Marc~G}{M.~G.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Graves}{G.}%
+     {Alex}{A.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Riedmiller}{R.}%
+     {Martin}{M.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Fidjeland}{F.}%
+     {Andreas~K}{A.~K.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Ostrovski}{O.}%
+     {Georg}{G.}%
+     {}{}%
+     {}{}}%
+  }
+  \list{publisher}{1}{%
+    {Nature Publishing Group}%
+  }
+  \strng{namehash}{MV+1}
+  \strng{fullhash}{MVKKSDRAAVJBMGGARMFAKOG+1}
+  \field{labelyear}{2015}
+  \field{sortinit}{M}
+  \field{number}{7540}
+  \field{pages}{529\bibrangedash 533}
+  \field{title}{Human-level control through deep reinforcement learning}
+  \field{volume}{518}
+  \field{journaltitle}{Nature}
+  \field{year}{2015}
+\endentry
+
+\entry{stella}{misc}{}
+  \true{moreauthor}
+  \name{author}{10}{}{%
+    {{}%
+     {{Mott}}{M.}%
+     {B.}{B.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {{Anthony}}{A.}%
+     {S.}{S.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {{Stolberg}}{S.}%
+     {E.}{E.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {{Watson}}{W.}%
+     {B.}{B.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Grebe}{G.}%
+     {Mark}{M.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {D'Andrea}{D.}%
+     {Joe}{J.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Nakos}{N.}%
+     {Kostas}{K.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {``Doodle''}{D.}%
+     {}{}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Jr.}{J.}%
+     {Darrell~Spice}{D.~S.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Zaballa}{Z.}%
+     {Alex}{A.}%
+     {}{}%
+     {}{}}%
+  }
+  \strng{namehash}{MB+1}
+  \strng{fullhash}{MBASSEWBGMDJNKDJDSZA+1}
+  \field{labelyear}{1995}
+  \field{sortinit}{M}
+  \field{howpublished}{\href{https://web.archive.org/web/20160414115348/http://stella.sourceforge.net/}{http://stella.sourceforge.net/}}
+  \field{note}{Last retrieved: \today. Link to Internet Archive.}
+  \field{title}{Stella: a multi-platform Atari 2600 VCS emulator}
+  \field{year}{1995}
+\endentry
+
+\entry{ng1999policy}{inproceedings}{}
+  \name{author}{3}{}{%
+    {{}%
+     {Ng}{N.}%
+     {Andrew~Y}{A.~Y.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Harada}{H.}%
+     {Daishi}{D.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Russell}{R.}%
+     {Stuart}{S.}%
+     {}{}%
+     {}{}}%
+  }
+  \strng{namehash}{NAYHDRS1}
+  \strng{fullhash}{NAYHDRS1}
+  \field{labelyear}{1999}
+  \field{sortinit}{N}
+  \field{booktitle}{ICML}
+  \field{pages}{278\bibrangedash 287}
+  \field{title}{Policy invariance under reward transformations: Theory and
+  application to reward shaping}
+  \field{volume}{99}
+  \field{year}{1999}
+\endentry
+
+\entry{oh2015action}{inproceedings}{}
+  \name{author}{5}{}{%
+    {{}%
+     {Oh}{O.}%
+     {Junhyuk}{J.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Guo}{G.}%
+     {Xiaoxiao}{X.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Lee}{L.}%
+     {Honglak}{H.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Lewis}{L.}%
+     {Richard~L}{R.~L.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Singh}{S.}%
+     {Satinder}{S.}%
+     {}{}%
+     {}{}}%
+  }
+  \strng{namehash}{OJ+1}
+  \strng{fullhash}{OJGXLHLRLSS1}
+  \field{labelyear}{2015}
+  \field{sortinit}{O}
+  \field{booktitle}{Advances in Neural Information Processing Systems}
+  \field{pages}{2863\bibrangedash 2871}
+  \field{title}{Action-conditional video prediction using deep networks in
+  atari games}
+  \field{year}{2015}
+\endentry
+
+\entry{russell2009aima}{book}{}
+  \name{author}{2}{}{%
+    {{}%
+     {{Russell}}{R.}%
+     {S.}{S.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {{Norvig}}{N.}%
+     {P.}{P.}%
+     {}{}%
+     {}{}}%
+  }
+  \list{publisher}{1}{%
+    {{Prentice Hall Press, Upper Saddle River, NJ, USA}}%
+  }
+  \strng{namehash}{RSNP1}
+  \strng{fullhash}{RSNP1}
+  \field{labelyear}{2009}
+  \field{sortinit}{R}
+  \field{edition}{3rd}
+  \field{isbn}{0136042597, 9780136042594}
+  \field{title}{Artificial Intelligence: A Modern Approach}
+  \field{year}{2009}
+\endentry
+
+\entry{stauffer1999adaptive}{inproceedings}{}
+  \name{author}{2}{}{%
+    {{}%
+     {Stauffer}{S.}%
+     {Chris}{C.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Grimson}{G.}%
+     {W~Eric~L}{W.~E.~L.}%
+     {}{}%
+     {}{}}%
+  }
+  \list{organization}{1}{%
+    {IEEE}%
+  }
+  \strng{namehash}{SCGWEL1}
+  \strng{fullhash}{SCGWEL1}
+  \field{labelyear}{1999}
+  \field{sortinit}{S}
+  \field{booktitle}{Computer Vision and Pattern Recognition, 1999. IEEE
+  Computer Society Conference on.}
+  \field{title}{Adaptive background mixture models for real-time tracking}
+  \field{volume}{2}
+  \field{year}{1999}
+\endentry
+
+\entry{sutton1998introduction}{book}{}
+  \name{author}{2}{}{%
+    {{}%
+     {Sutton}{S.}%
+     {Richard~S}{R.~S.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Barto}{B.}%
+     {Andrew~G}{A.~G.}%
+     {}{}%
+     {}{}}%
+  }
+  \list{publisher}{1}{%
+    {MIT Press}%
+  }
+  \strng{namehash}{SRSBAG1}
+  \strng{fullhash}{SRSBAG1}
+  \field{labelyear}{1998}
+  \field{sortinit}{S}
+  \field{title}{Reinforcement Learning: An Introduction}
+  \field{year}{1998}
+\endentry
+
+\entry{sutton1999between}{article}{}
+  \name{author}{3}{}{%
+    {{}%
+     {Sutton}{S.}%
+     {Richard~S}{R.~S.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Precup}{P.}%
+     {Doina}{D.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Singh}{S.}%
+     {Satinder}{S.}%
+     {}{}%
+     {}{}}%
+  }
+  \list{publisher}{1}{%
+    {Elsevier}%
+  }
+  \strng{namehash}{SRSPDSS1}
+  \strng{fullhash}{SRSPDSS1}
+  \field{labelyear}{1999}
+  \field{sortinit}{S}
+  \field{number}{1}
+  \field{pages}{181\bibrangedash 211}
+  \field{title}{Between MDPs and semi-MDPs: A framework for temporal
+  abstraction in reinforcement learning}
+  \field{volume}{112}
+  \field{journaltitle}{Artificial intelligence}
+  \field{year}{1999}
+\endentry
+
+\lossort
+\endlossort
+
+\endinput

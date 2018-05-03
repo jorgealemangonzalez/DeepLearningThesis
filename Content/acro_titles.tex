@@ -1,0 +1,40 @@
+% Write the long acronyms in the PDF bookmarks if needed
+
+\ExplSyntaxOn
+\cs_new:Npn \acro_expandable_long:n #1
+  { \prop_item:Nn \l__acro_long_prop {#1} }
+
+\cs_new:Npn \acro_expandable_long_plural:n #1
+  {
+    \bool_if:nTF
+      { \prop_item:Nn \l__acro_long_plural_form_prop {#1} }
+      { \prop_item:Nn \l__acro_long_plural_prop {#1} }
+      {
+        \prop_item:Nn \l__acro_long_prop {#1}
+        \prop_item:Nn \l__acro_long_plural_prop {#1}
+      }
+  }
+
+\cs_new:Npn \acro_pdf_string_long:n #1
+  {
+    \acro_if_star_gobble:nTF {#1}
+      { \acro_expandable_long:n }
+      { \acro_expandable_long:n {#1} }
+  }
+
+\cs_new:Npn \acro_pdf_string_long_plural:n #1
+  {
+    \acro_if_star_gobble:nTF {#1}
+      { \acro_expandable_long_plural:n }
+      { \acro_expandable_long_plural:n {#1} }
+  }
+
+\AtBeginDocument
+  {
+    \pdfstringdefDisableCommands
+      {
+        \cs_set_eq:NN \acl  \acro_pdf_string_long:n
+        \cs_set_eq:NN \aclp \acro_pdf_string_long_plural:n
+      }
+  }
+\ExplSyntaxOff
