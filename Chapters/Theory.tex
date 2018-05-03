@@ -122,10 +122,26 @@ V^{\pi^*}(s)\geq V^{\pi}(s) \forall \pi \forall s \in \mathcal{S}
 \end{equation}
 Where $\mathcal{S}$ is the state space of the environment.
 
-So we can define $V^*$ and $Q^*$ as the value function and action value function
+So we can define $V^*$ and $Q^*$ as the value function and \newconcept{action value function} respectively.
 that give us the expected return of following the optimal policy $\pi^*$.
 
 \subsection{Q-learning}
+\newconcept(Q-learning) is an off-policy algorithm that uses experience to approximate the optimal action value function. It updates the $Q$ function in each step $t$ with the following method:
+\begin{equation}
+Q(s_t,a_t)\leftarrow Q(s_t,a_t) + \alpha [\;r_{t+1} + \gamma \max_a Q(s_{t+1},a) - Q(s_t,a_t)]
+\end{equation}
+\citep[Section~6.5]{sutton1998introduction}
+Where $\alpha$ is a constant step-size parameter that controls how fast the $Q(s_t, a_t)$ value change. Note that the $Q$ value is being updated based on rewards and the max $Q$ of all actions in $s_{t+1}$, which makes that in the long term $Q$ converges to $Q^*$. It is also important that this updates does not depend on the policy followed so it will converge even in the case a random action selection is being used. The only imperative is to visit all state-action pairs continually to make several updates of each $Q$ value and continually improve its approximation to $Q^*$.
+
+There is a more general version of this algorithm called \newconcept{n-step Q-learning} which instead of using the reward and $Q$ value of the next state $t+1$ it updates taking into account $t+n-1$ rewards and the maximum $t+n$ $Q$ value.
+\begin{equation}
+Q(s_t,a_t)\leftarrow Q(s_t,a_t) + \alpha [\;\sum^{n-1}_{i=0}\gamma^i r_{t+i} + \gamma^n \max_a Q(s_{t+n},a) - Q(s_t,a_t)]
+\end{equation}
+This make sense when the action taken in states $t, t+1,\dots , t+n-1$ and their respective rewards are known.
+
+\subsection{Actor Critic\label{subsec:AC}}
+It is a different representation of the agent-environment interface where the agent is splitted into policy and value functions. The \newconcept{actor} is the one that selects the actions ( policy function does this ) and the \newconcept{critic} criticizes the actions taken by the actor ( value function does this ). The value function determines how good is a state in terms of future rewards and the states is determined by the actions taken following the policy.
+
 %%% Local Variables:
 %%% mode: latex
 %%% TeX-master: "../report"
