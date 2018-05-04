@@ -125,8 +125,8 @@ Where $\mathcal{S}$ is the state space of the environment.
 So we can define $V^*$ and $Q^*$ as the value function and \newconcept{action value function} respectively.
 that give us the expected return of following the optimal policy $\pi^*$.
 
-\subsection{Q-learning}
-\newconcept(Q-learning) is an off-policy algorithm that uses experience to approximate the optimal action value function. It updates the $Q$ function in each step $t$ with the following method:
+\subsection{Q-learning\label{subsec:Qlearn}}
+\newconcept{Q-learning} is an off-policy algorithm that uses experience to approximate the optimal action value function. It updates the $Q$ function in each step $t$ with the following method:
 \begin{equation}
     Q(s_t,a_t)\leftarrow Q(s_t,a_t) + \alpha [\;r_{t+1} + \gamma \max_a Q(s_{t+1},a) - Q(s_t,a_t)]
 \end{equation}
@@ -234,10 +234,242 @@ parallel way and stores experiential knowledge to use it in another experiences.
 It continually adapts connexions between neurons to reach some goals, this process
 is named learning.
 
-\subsection{Artificial Neuron}
+\subsection{Artificial neuron}
 An \newconcept{artificial neuron}, from now on called \newconcept{neuron}, is an
 information-processing unit modeled as a mathematical
 function with these five basic elements:
+\begin{itemize}
+    \item A set of connecting links with some weight associated.
+    A signal $x_j$ at the input of connexion $j$ related to neuron $k$ is multiplied by the weight $w_{kj}$.
+    \item An adder for summing the weighted input signals.
+    \item An activation function $\varphi(\cdot)$ that limits the amplitude of the output of a neuron.
+    \item A bias $b_k$ which has the effect of increases or reduces the input of the activation function.
+    \item An output signal $y_k$ which is the result of the processed information.
+\end{itemize}
+
+\begin{figure}[hbtp]
+\begin{center}
+\includegraphics[width=200]{img/artificial_neuron.png}
+\end{center}
+\caption[Artificial neuron diagram]
+{Achitecture of an artificial neuron}
+\label{fig:AN}
+\end{figure}
+
+In mathematical terms we describe the neuron with the following equation:
+\begin{equation}
+    y_k=\varphi(b_k+\sum\limits_{j=1}^m w_{kj} x_j)
+\end{equation}
+where $x_1, x_2, \dots, x_m$ are the input signals;
+$w_{k1}, w_{k2}, \dots, wk_m$ are the respective weights of neuron $k$;
+$b_k$ is the bias;
+$\varphi(\cdot)$ is the activation function;
+and $y_k$ is the output signal of the neuron.
+
+\subsection{Multilayer perceptron}
+A \newconcept{multilayer perceptron} is a kind of ANN made up by several ordered \newconcept{layers} of neurons.
+It is characterized by having an input layer, several hidden layers and an output layer.
+
+The input layer is a set of neurons whose inputs are not connected to other neurons and whose outputs are connected to
+the first hidden layer.
+Each of the hidden layers satisfies that the output of neurons in layer $i$ is the input of some neurons in layer $i+1$,
+except the last hidden layer that is connected with the output layer.
+The output layer is a set of neurons whose results form the output signal of the network.
+When each neuron has as input all neurons of previous layer the network is named fully connected.
+
+\begin{figure}[hbtp]
+\begin{center}
+\includegraphics[width=300]{img/multilayer_perceptron.png}
+\end{center}
+\caption[Multilayer perceptron diagram]
+{Fully connected multilayer perceptron.}
+\label{fig:FullyMP}
+\end{figure}
+
+In multilayer perceptrons there are two kinds of signals, \newconcept{function signals} and \newconcept{error signals}.
+
+A function signal is an input signal that propagates through the network generating an output signal.
+The output signal is the result of the function parametrized by all the weights and biases of all neurons.
+
+An error signal originates at the output layer and propagates backwards through the network.
+It approximates the difference between the output signal and the desired output signal, given that we are using the \ac{ANN}
+to approximate some function.
+Each node computes its contribution to the error by estimating the gradient with respect its weights and bias.
+
+The process of adjusting the weights and biases of each neuron to approximate a required output signal given some input
+signal is named \newconcept{training}.
+
+Fully connected layers are the most computationally expensive to train because of the amount of connexions and variables.
+One way of reducing complexity is to use \newconcept{shared weights}, instead of having different weights for each input of each neuron,
+some part of the weights of a neuron are reused to be multiplied for the input of another neurons.
+This reduces the number of variables the network should maintain and update, but the number of mathematical computations
+will be the same.
+
+Another way of reducing the number of computations is by reducing the number of nodes.
+\newconcept{Pooling layers} does that, is a form of non-linear downsampling that applies a function to a group of nodes resuming them
+in just one node.
+
+\subsection{Transfer learning in \aclp{NN}}
+The aim of \newconcept{transfer learning} techniques is to improve the learning process of a new task given some previous knowledge
+about related tasks.
+Neural networks, especially the deepest ones, need tons of data to adjust their weights to successfully perform some tasks.
+
+A way to reduce the amount of training data needed and speed up the learning process is to reuse some \ac{NN} previously
+trained for a similar task.
+Then the \ac{NN} adapts its weights to succeed in the target task.
+For example, if we want to recognize dogs inside images, we could use some existing \ac{NN} developed to recognize cats and
+then adapt its weights.
+
+Another method is to train our network in a general problem related to the target task to later focus on it.
+With deep neural networks we could train a large network on some task and then reuse just the first layers, that should
+contain the general feature extraction about the problem.
+In the previous example we could take the layers of the network responsible of recognizing shapes and add some new nodes
+to train on recognizing dogs.
+A simpler example is to train the full network first to recognize shapes and then train on dogs.
+
+\section{\acl{DL}}
+\acf{DL} is a machine learning method based on high-level representations of the data.
+It basically extends \acp{ANN} by adding multiple hidden layers creating huge neural networks with lots of parameters and interrelations.
+
+In the last years this technique has become really popular as a consequence of its great results comparing to human level performance in many tasks.
+
+\subsection{\acl{CNN}}
+
+This network is a variation of the multilayer perceptron specifically designed to recognize visual patterns.
+They are usually made up of four different types of layers: \newconcept{convolutional layers}, \newconcept{ReLU layers},
+\newconcept{pooling layers} and fully connected layers.
+
+Convolutional layers apply a convolution to some previous layer, characterized by a filter.
+Each node defines its connections based on the filter and their position. The filter is made up by \newconcept{kernel size},
+\newconcept{stride}, \newconcept{padding} and \newconcept{values}.
+The kernel size defines the shape and amount of nodes of the previous layer that are connected to a convolutional layer node.
+The stride defines how the kernel moves across the previous layer, with each move, the filter is applied to some group of
+nodes by connecting them to a new node of the convolutional layer.
+The padding (specifically zero padding) is the amount of zeros to add around the border of each dimension in the previous
+layer, this helps to preserve as much information about the previous layer values.
+Finally, the values define the weights for each input signal in each neuron.
+These are the same values for each convolutional layer node.
+This concept is named \newconcept{shared weights} and minimizes the amount
+of variables the neural network has to retain and update.
+
+ReLU layers increases the nonlinear properties of the model by applying the function $f(x)=max(0,x)$ to all outputs of the previous layer.
+It is common practice to apply this layer after convolutional layers.
+Applying ReLU functions mitigates the \newconcept{vanishing gradient problem}, which is characterized of an exponential
+reduction of the gradient through the layers.
+
+Pooling layers generate a downsampled version of the previous layer.
+It applies some function ( usually a max function ) to a group of outputs of the previous layer and saves the result in
+just one node of the pooling layer.
+This technique reduces the parameters of the network which decrease the memory and calculations needed, it also reduces overfitting.
+
+\subsection{\acl{DQN}}
+This algorithm was introduced by \citeauthor{mnih2015human} in \citetitle{mnih2015human} (\citeyear{mnih2015human}).
+
+A \acl{DQN}, from now on \ac{DQN}, is a deep convolutional neural network designed to approximate Q values of reinforcement learning.
+This agent learns from images to approximate the optimal action-value function (\ffref{subsec:Qlearn}).
+The aim of \acp{DQN} is to learn successful policies directly from images of some given problem, for example, a game.
+For that purpose the output of the network will be the Q values of each action given some input state.
+
+Bear in mind that when using \acp{NN} in reinforcement learning the learning problem can become unstable or even diverge.
+This is caused by the weight updates, that changes not only the result of som action-value pair but all of the action-value associations;
+the correlation present in sequence of observations;
+and the correlations between the action-values and target values.
+For that reason, apart from the \ac{NN}, they used an experience replay ($E$).
+This structure saves last $T$ states which the environment has gone by in the format $e_t=(s_t ,a_t , r_t , s_{t+1})$.
+Then it picks in an uniformly random manner from this set to train the network.
+Training on independent and identically distributed samples helps reducing the instability generated by the neural network.
+
+Q-learning updates are organized in iterations, containing several training steps.
+Each iteration has its fixed network
+parameters $\theta^-_i$ and applies several training steps obtained from the experience replay to finally change them.
+This updates are characterized by the loss applied to the network to adjust its weights.
+They defined the loss function in the following way:
+\begin{equation}
+    L_i(\theta_i)=E_{(s,a,r,s') \sim U(D))} \left [ \bigg(r+\gamma \max_{a'}Q(s',a';\theta_i^-)-Q(s,a;\theta_i)\bigg )^2\right ]
+\end{equation}
+Where $\theta_i$ and $\theta^-_i$ are the wights of two neural networks with the same architecture.
+$\theta_i$ is updated each training step while $\theta^-_i$ only change when the iteration finish, following
+$\theta_i = \theta^-_i$ after this happens.
+
+This network has successfully surpass human-level skills in many atari games.
+But in montezuma's revenge it was unable to obtain any score.
+
+\subsection{\acl{A3C}\label{subsec:A3C}}
+The algorithm \acl{A3C}, from now on \ac{A3C}, was introduced by \citeauthor{mnih2016A3C} in
+\citetitle{mnih2016A3C} (\citeyear{mnih2016A3C}).
+
+The main difference between asynchronous methods and the methodology used in \ac{DQN} is the experience replay.
+In \ac{A3C} instead of having an experience replay, to take uniformly random states and avoid instability, it runs in
+parallel multiple instances of the environment.
+At each time step the agent is being trained with different states of multiple environments that runs in isolation.
+
+Another difference between \ac{DQN} and \ac{A3C} is the reinforcement learning approach.
+It uses the actor-critic interface introduced in \ffref{subsec:AC}.
+It defines two \acp{NN} that represent the value of the state ($V$) and the policy ($\pi$).
+$V$ is the output of just one node, but $\pi$ is the output of a set of nodes, each one representing the probability of taking
+an action.
+In practice this two \acp{NN} share almost all the layers, except the last one ($V$ and $\pi$).
+
+%TODO A LO MEJOR HAY QUE DEFINIR N-STEP RETURNS EN ESE APARTADO
+Also the loss function used to train the network differ from \ac{DQN}, it uses n-step returns (\ffref{subsec:returns}) and it does not
+update $Q$ values, it updates $V$ and $\pi$.
+The number of steps used in the loss function is $t_{max}$ ( an hyperparameter ) but if a
+final state is reached before that, the loss is computed with less than $t_{max}$.
+It also adds an entropy factor $H$ based on the policy, in order to improve exploration by discouraging premature
+convergence to suboptimal deterministic policies.
+\ac{A3C} uses the following update function:
+\begin{equation}
+    \nabla_{\theta'}\;log\:\pi(a_t\mid s_t;\theta')\;A(s_t,a_t;\theta,\theta_v)+\beta\nabla_{\theta'}H(\pi(s_t;\theta'))
+\end{equation}
+Where $A$ is the advantage function of n-step returns in terms of $V$.
+$\theta'$ are the weights related to the policy and $\theta_v$ the weights related to the value function.
+$\beta$ is an hyperparameter that controls the strength of the entropy regularization term.
+The advantage function defines at follows:
+\begin{equation}
+    A_t=\sum^{k-1}_{i=0}\gamma^i r_{t+i}+\gamma^k V(s_{t+k};\theta_v)-V(s_t;\theta_v)
+\end{equation}
+Where $k$ can vary from state to state ( if a final state is reached ) and is upper-bounded by $t_{max}$.
+
+This algorithm is parallelized in different threads which contain different replicas of a shared \ac{NN}.
+Each thread interacts with the environment using his own \ac{NN}, until $t_{max}$ or end of game are reached, and updates the
+global network parameters with the update function above.
+The algorithm used in each thread is the following.
+
+\begin{algorithm}[hbtp]
+\begin{algorithmic}
+    \State \newconcept{//Assume global shared parameter vectors $\theta$ and $\theta_v$ and global shared counter $T = 0$}
+    \State \newconcept{//Assume thread-specific parameter vectors $\theta' and \theta_v'$}
+    \State Initialize thread step counter $t \leftarrow 1$
+    \Repeat
+        \State Reset gradients: $d\theta \leftarrow 0$ and $d\theta_v \leftarrow 0$.
+        \State Synchronize thread-specific parameters $\theta' = \theta$ and $\theta_v' = \theta_v$
+        \State $t_start = t$
+        \State Get state $s_t$
+        \Repeat
+            \State Perform $a_t$ according to policy $\pi(a_t|s_t;\theta')$
+            \State Receive reward $r_t$ and new state $s_{t+1}$
+            \State $t \leftarrow t + 1$
+            \State $T \leftarrow T + 1$
+        \until{terminal $s_t \OR t-t_{start == t_{max}}$ }
+        \State\[
+            R =
+            \begin{cases}
+                0 & \text{for terminal} s_t
+                V(s_t, \theta_v') & \text{for non-terminal} s_t \Comment{Bootstrap from last state}
+            \end{cases}
+        \]
+        \For{ $i \in \textbraceleft t-1,\dots,t_{start}\textbraceright$}
+            \State $R \leftarrow r_i + \gamma R$
+            \State Accumulate gradients wrt $\theta': d\theta \leftarrow d\theta + log\:\pi(a_t\mid s_t;\theta')\;A(s_t,a_t;\theta,\theta_v')+\beta\nabla_{\theta'}H(\pi(s_t;\theta'))$
+            \State Accumulate gradients wrt $d\theta_v \leftarrow d\theta_v + \partial(A(s_t,a_t;\theta,\theta_v'))^2 / \partial \theta_{v}'$
+        \EndFor
+        \State Perdorm asynchronous update of $\theta$ using $d\theta$ and of $\theta_v$ using $d\theta_v$.
+    \until{$T > T_{max}$}
+\end{algorithmic}
+\caption{\acl{A3C} - psudocode for each actor-learner thread (\cite{mnih2016A3C})}
+\label{alg:A3C}
+\end{algorithm}
+
 
 %%% Local Variables:
 %%% mode: latex
