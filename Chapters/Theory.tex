@@ -457,10 +457,10 @@ The algorithm used in each thread is the following.
             \end{cases}
         \For{ $i \in \{ t-1,\dots,t_{start}\}$}
             \State $R \leftarrow r_i + \gamma R$
-            \State Accumulate gradients wrt $\theta': d\theta \leftarrow d\theta + \nabla_{\theta'} log\:\pi(a_i\mid s_i;\theta')\;A(s_i,a_i;\theta,\theta_v')+\beta\nabla_{\theta'}H(\pi(s_i;\theta'))$
-            \State Accumulate gradients wrt $\theta_v': d\theta_v \leftarrow d\theta_v + \partial(A(s_i,a_i;\theta,\theta_v'))^2 / \partial \theta_{v}'$
+            \State Accumulate gradients wrt $\theta': d\theta \leftarrow d\theta + \nabla_{\theta'} log\:\pi(a_i\mid s_i;\theta')(R-V(s_i;\theta_v'))+\beta\nabla_{\theta'}H(\pi(s_i;\theta'))$
+            \State Accumulate gradients wrt $\theta_v': d\theta_v \leftarrow d\theta_v + \partial(R-V(s_i;\theta_v'))^2 / \partial \theta_{v}'$
         \EndFor
-        \State Perdorm asynchronous update of $\theta$ using $d\theta$ and of $\theta_v$ using $d\theta_v$.
+        \State Perform asynchronous update of $\theta$ using $d\theta$ and of $\theta_v$ using $d\theta_v$.
     \Until{$T > T_{max}$}
 \end{algorithmic}
 \caption{\acl{A3C} - psudocode for each actor-learner thread (\cite{mnih2016A3C})}
