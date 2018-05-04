@@ -443,28 +443,25 @@ The algorithm used in each thread is the following.
     \Repeat
         \State Reset gradients: $d\theta \leftarrow 0$ and $d\theta_v \leftarrow 0$.
         \State Synchronize thread-specific parameters $\theta' = \theta$ and $\theta_v' = \theta_v$
-        \State $t_start = t$
+        \State $t_{start} = t$
         \State Get state $s_t$
         \Repeat
             \State Perform $a_t$ according to policy $\pi(a_t|s_t;\theta')$
             \State Receive reward $r_t$ and new state $s_{t+1}$
             \State $t \leftarrow t + 1$
             \State $T \leftarrow T + 1$
-        \until{terminal $s_t \OR t-t_{start == t_{max}}$ }
-        \State\[
-            R =
-            \begin{cases}
-                0 & \text{for terminal} s_t
-                V(s_t, \theta_v') & \text{for non-terminal} s_t \Comment{Bootstrap from last state}
+        \Until{terminal $s_t $ \textbf{or} $t-t_{start} == t_{max}$ }
+        \State R = \begin{cases}
+                0,   & \text{ for terminal }\ s_t \\
+                V(s_t, \theta_v'),   & \text{for non-terminal } s_t \;\newconcept{// Bootstrap from last state}\\
             \end{cases}
-        \]
-        \For{ $i \in \textbraceleft t-1,\dots,t_{start}\textbraceright$}
+        \For{ $i \in \{ t-1,\dots,t_{start}\}$}
             \State $R \leftarrow r_i + \gamma R$
-            \State Accumulate gradients wrt $\theta': d\theta \leftarrow d\theta + log\:\pi(a_t\mid s_t;\theta')\;A(s_t,a_t;\theta,\theta_v')+\beta\nabla_{\theta'}H(\pi(s_t;\theta'))$
-            \State Accumulate gradients wrt $d\theta_v \leftarrow d\theta_v + \partial(A(s_t,a_t;\theta,\theta_v'))^2 / \partial \theta_{v}'$
+            \State Accumulate gradients wrt $\theta': d\theta \leftarrow d\theta + \nabla_{\theta'} log\:\pi(a_i\mid s_i;\theta')\;A(s_i,a_i;\theta,\theta_v')+\beta\nabla_{\theta'}H(\pi(s_i;\theta'))$
+            \State Accumulate gradients wrt $\theta_v': d\theta_v \leftarrow d\theta_v + \partial(A(s_i,a_i;\theta,\theta_v'))^2 / \partial \theta_{v}'$
         \EndFor
         \State Perdorm asynchronous update of $\theta$ using $d\theta$ and of $\theta_v$ using $d\theta_v$.
-    \until{$T > T_{max}$}
+    \Until{$T > T_{max}$}
 \end{algorithmic}
 \caption{\acl{A3C} - psudocode for each actor-learner thread (\cite{mnih2016A3C})}
 \label{alg:A3C}
