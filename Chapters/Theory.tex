@@ -90,7 +90,7 @@ By defining $\mathcal{F}$ in this way we can ensure that the reward shaping is r
 
 \subsection{Policy\label{subsec:policy}}
 
-As described by \citeauthor*[Section~1.3]{sutton1998introduction}, a policy $\pi$ defines the learning agent’s way of behaving at a given time. It selects the action, given the environment state. During the learning process of the agent its policy may vary multiple times, looking for the best mapping of state-action pairs that fits the problem. This is call the optimal policy $\pi^*$ and the objective of any reinforcement learning algorithm is to approximate its policy to the optimal policy.
+As described by \citeauthor*[Section~1.3]{sutton1998introduction}, a policy $\pi$ defines the learning agent’s way of behaving at a given time. It selects the action, given the environment state. During the learning process of the agent its policy may vary multiple times, looking for the best mapping of state-action pairs that fits the problem. This is called the optimal policy $\pi^*$ and the objective of any reinforcement learning algorithm is to approximate its policy to the optimal policy.
 
 In most cases the policy is a probability distribution over the actions that can be choosed in some state $s$. Is denoted as $\pi(a,s)$ where $s$ belongs to the state space and $a$ to the action space, fulfilling the following condition:
 \begin{equation}
@@ -143,7 +143,8 @@ This make sense when the action taken in states $t, t+1,\dots , t+n-1$ and their
 
 \subsection{Actor Critic\label{subsec:AC}}
 It is a different representation of the agent-environment interface where the agent is splitted into policy and value
-functions. The \newconcept{actor} is the one that selects the actions ( policy function does this ) and the
+functions.
+The \newconcept{actor} is the one that selects the actions ( policy function does this ) and the
 \newconcept{critic} criticizes the actions taken by the actor ( value function does this ). The value function
 determines how good is a state in terms of future rewards and the states is determined by the actions taken following the policy.
 
@@ -308,7 +309,7 @@ This reduces the number of variables the network should maintain and update, but
 will be the same.
 
 Another way of reducing the number of computations is by reducing the number of nodes.
-\newconcept{Pooling layers} does that, is a form of non-linear downsampling that applies a function to a group of nodes resuming them
+\newconcept{Pooling layers} do that, is a form of non-linear downsampling that applies a function to a group of nodes resuming them
 in just one node.
 
 \subsection{Transfer learning in \aclp{ANN} \label{subsec:TransferLearning}}
