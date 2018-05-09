@@ -5,7 +5,7 @@
 I have modified \ac{A3C} algorithm in order to take advantage of sub-task with the purpose of enhancing training speed
 and exploration.
 I refer to this new algorithm \acf{MA3C} and in this section you will find specifications about the architectures of
-both \acp{NN}: \ac{A3C} and \ac{MA3C}.
+both \acp{ANN}: \ac{A3C} and \ac{MA3C}.
 In addition I will explain the \ac{MA3C} algorithm.
 
 They have been developed using tensorflow (\cite{tensorflow2015}), an open source machine learning framework which I find
@@ -14,12 +14,18 @@ really useful to implement deep learning algorithms.
 \subsection{\acl{A3C}}
 
 As I explained previously (\ffref{subsec:A3C}) this algorithm uses the image of the environment to represent the state.
-I have used almost the same preprocessing and network architecture (\ffref{fig:A3C}) than in \citetitle{sutton1998introduction} (\cite{mnih2013}).
-In practice the images of any game are downsampled to $84 \times 84$ grayscale pixels in order to reduce the computational cost of training,
-specifically the input dimensionality.
+I have used almost the same preprocessing and network architecture (\ffref{fig:A3C}) than in \citetitle{mnih2016A3C} (\cite{mnih2016A3C}).
+In practice the images of any game are resized to $84 \times 84$ grayscale pixels in order to reduce the computational cost of training,
+specifically the input dimensionality, and also to fit the convolutions.
 The algorithm applies this preprocessing to 4 stacked frames allowing the neural network to calculate (implicitly) the movement
 of the different pixels/ objects on the screen.
+There is a frame skip of 4, which means that, only one out of four consecutive frames is taken into account and stacked.
+There is also a component-wise maximum selection over two consecutive frames, the one stacked and the next one which will
+not be stacked.
 The state dimensionality is $84 \times 84 \times 4$ which defines the input layer of the \ac{DNN}.
+This is just for Atari games, in Simple States (\ffref{subsec:SimpleStates}) and Complex States (\ffref{subsec:ComplexStates})
+the RGB channels of a single frame are used instead.
+The dimensionality of the input layer in that games is $84 \times 84 \times 3$.
 
 There are several hidden layers specifically designed for obtaining high level abstractions of the environment frames.
 The first one is a convolutional layer (\ffref{subsec:CNN}) with $16$ filters with kernel dimension $8 \times 8$ and stride $4$,
@@ -47,16 +53,76 @@ The critic is just $1$ neuron representing the value function $V(s_t)$.
 \subsection{\acl{MA3C}\label{subsec:MA3C}}
 
 This algorithm is strongly associated with hierarchial reinforcement learning, since the last layer of \ac{A3C}
-($\pi and \V(s_t)$) is replicated several times in order to model different tasks inside a common bigger problem.
-% TODO EXPRESAR LOS PROBLEMAS COMO OPCIONES?
-% TODO HACE FALTA REPLICAR V(S)?
+($\pi$ and $V(s_t)$) is replicated several times in order to model different tasks inside a common bigger problem.
+
+\begin{figure}[hbtp]
+\begin{center}
+\includegraphics[width=430]{img/MA3C_architecture.png}
+\end{center}
+\caption[MA3C architecture]
+{Architecture of the \ac{MA3C} algorithm.}
+\label{fig:MA3C}
+\end{figure}
+
+%TODO k hiperparametro
+As you can see in \ffref{fig:MA3C} there are multiple subtrees defining different \acl{AC} approaches to the given input state,
+each one connected to the high level features (last layer) but not between them.
+With this architecture the algorithm uses transfer learning (\ffref{subsec:TransferLearning}) to extract common features
+about the environment, which are useful for all \ac{AC} layers.
+Because every subtree is used to solve a different task inside a bigger problem, the common parameters will be optimized to
+extract as much information as possible about the general problem while the weights of each subtree will be optimized to
+succeed in the specific task.
+
+The update function, advantage function and algorithm of \ac{MA3C} remain the same ones that in \ac{A3C} (\ffref{subsec:A3C}).
+The only difference is that this one selects the parameter vector $\theta'$ and $\theta_{v}'$ that will be updated
+depending on the subtree currently active.
+The method which selects one subtree or another is arbitrary, they might be selected with another \ac{AI} method, just
+with a couple of rules or even as part of the state.
+In this thesis I have used two aproaches: part of the state, in Simple States (\ffref{subsection:SimpleStates}) and Complex States
+(\ffref{subsection:ComplexStates}); and some rules about the position of the agent in Montezuma's Revenge (\ffref{subsection:MontezumasRevenge}).
+
+The full algorithm with the few changes explained is shown in \ffref{alg:MA3C}
+
+\begin{algorithm}[hbtp]
+\begin{algorithmic}
+    \State \newconcept{//Assume global shared parameter vectors $\theta$ and $\theta_v$ and global shared counter $T = 0$}
+    \State \newconcept{//Assume thread-specific parameter vectors $\theta' and \theta_v'$}
+    \State \newconcept{//Assume subree-specific parameter vectors $\theta^k' and \theta^k_v'$ from $\theta' and \theta_v'$}
+    \State Initialize thread step counter $t \leftarrow 1$
+    \Repeat
+        \State Reset gradients: $d\theta \leftarrow 0$ and $d\theta_v \leftarrow 0$.
+        \State Synchronize thread-specific parameters $\theta' = \theta$ and $\theta_v' = \theta_v$
+        \State $t_{start} = t$
+        \State Get state $s_t$
+        \Repeat
+            \State Perform $a_t$ according to policy $\pi(a_t|s_t;\theta')$
+            \State Receive reward $r_t$ and new state $s_{t+1}$
+            \State $t \leftarrow t + 1$
+            \State $T \leftarrow T + 1$
+        \Until{terminal $s_t $ \textbf{or} $t-t_{start} == t_{max}$ }
+        \State R = \begin{cases}
+                0,   & \text{ for terminal }\ s_t \\
+                V(s_t, \theta_v'),   & \text{for non-terminal } s_t \;\newconcept{// Bootstrap from last state}\\
+            \end{cases}
+        \For{ $i \in \{ t-1,\dots,t_{start}\}$}
+            \State $R \leftarrow r_i + \gamma R$
+            \State Select $k$ \;\newconcept{// Select subtree with any criteria}
+            \State Accumulate gradients wrt $\theta^k': d\theta \leftarrow d\theta + \nabla_{\theta'} log\:\pi(a_i\mid s_i;\theta')(R-V(s_i;\theta_v'))+\beta\nabla_{\theta'}H(\pi(s_i;\theta'))$
+            \State Accumulate gradients wrt $\theta^k_v': d\theta_v \leftarrow d\theta_v + \partial(R-V(s_i;\theta_v'))^2 / \partial \theta_{v}'$
+        \EndFor
+        \State Perform asynchronous update of $\theta$ using $d\theta$ and of $\theta_v$ using $d\theta_v$.
+    \Until{$T > T_{max}$}
+\end{algorithmic}
+\caption{\acl{MA3C} - psudocode for each actor-learner thread (\cite{mnih2016A3C})}
+\label{alg:MA3C}
+\end{algorithm}
 
 \section{Environments}
 The ultimate goal of this thesis is to play Montezuma's revenge, but since it is a complex game i have developed two
 simpler environments.
 Both helped me to understand the pros and cons of \ac{A3C} and to develop a new version of this algorithm that uses subtasks.
 
-\subsection{Simple States}
+\subsection{Simple States\label{subsec:SimpleStates}}
 
 This game is made by a $6 \times 10$ grid of square blocks.
 Their colors define the kind of object and how they will interact with the hero (an special object).
@@ -88,14 +154,37 @@ As you can imagine the goal of the hero is to reach the door by going through th
 with any wall, the maximum score is 2.
 The game is organized in three different phases/states.
 The objective of the first one is to reach the checkpoint,
-the second one the hidden checkpoint and the third one the door.
+of the second one, the hidden checkpoint and in the third one, the door.
 The information about the current phase is available
 to the player.
+
+In order to solve this game with both \ac{A3C} and \ac{MA3C} algorithms we must model it as a \ac{SMDP} problem,
+describing components of the tuple $\langle\mathcal{S}, \mathcal{A}_s, \mathcal{P}_a(s,s'), \mathcal{R}_a(s,s'), \gamma \rangle$.
+
+\begin{itemize}
+    \item Each states is a pair $s_t = (\mathbf{F}, p)$ where $p \in \{0,1,2\}$ is the phase of the game and
+    $\mathbf{F}$ is the matrix of RGB pixels with dimensionality $84\times84\times3$.
+    $\mathcal{S}$ is the set of all $s$ which satisfies the conditions about object collisions presented above.
+
+    \item $\forall s \; \mathcal{A}_s = \{UP, DOWN, LEFT, RIGHT, WAIT\}$ and each action $a_{t}\in \mathcal{A}_s $ corresponds to
+    the movement of the hero.
+
+    \item This game is deterministic, which means that $\forall s\forall a\exists s' \; |\; \mathcal{P}_a(s,s') = 1$ implying
+    $\forall s\forall a\forall {s''\neq s'} \;\; \mathcal{P}_a(s,s'') = 0$
+
+    \item The reward function is determined as explained before.
+    Depending on the phase ($p$) some transition from a frame $\mathbf{F}_t$
+    to another frame $\mathbf{F}_{t+1}$ may come with a reward $\mathcal{R} \in \{ -1, 0, 1\}$.
+
+    \item The discount factor $\gamma$ is $0.99$
+\end{itemize}
 
 The purpose of creating this game is to prove that the \ac{MA3C} algorithm (\ffref{subsec:MA3C}) has better exploration
 skills than A3C (\ffref{subsec:A3C}).
 
-\subsection{Complex States}
+% TODO INCLUDE OPTIONS SIN SABER LAS ACCIONES INTERMEDIAS?
+
+\subsection{Complex States\label{subsec:ComplexStates}}
 This game is really similar to the previous one but the dynamics are a bit different.
 The hero must follow a series of steps to reach the door.
 The order in which the hero must go through the objects is: checkpoint, hidden checkpoint, door, hidden checkpoint,
@@ -131,8 +220,14 @@ The second one finish the second time it reaches the door.
 As in Simple States the hero must follow the path in order to obtain the rewards and finish the game.
 The information about the current phase is also available to the player.
 
+The \ac{MDP} problem of this game is exactly the same that in Simple States (\ffref{subsec:SimpleStates}).
+The only thing that changes are the rules of rewards and phases which i have already defined.
+
 The purpose of creating this game is to prove that \ac{A3C} is quite bad going back on his own steps (when the image of the
 game is similar) while for \ac{MA3C} is easy.
+
+\subsection{Montezuma's Revenge\label{subsection:MontezumasRevenge}}
+This is the montezumas revenge game
 %%% Local Variables: 
 %%% mode: latex
 %%% TeX-master: "../report"
