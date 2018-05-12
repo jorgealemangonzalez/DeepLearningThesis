@@ -1,12 +1,33 @@
 \chapter{Evaluation}
 
+In this chapter I will supply enough evidence about how the \ac{MA3C} algorithm learns faster and explores better than
+\ac{A3C} in environments where subgoals can be defined.
+All the code needed to make the following analysis was developed inside a project of the Universidad Pompeu Fabra researcher
+Miquel Juyent.
+The \ac{A3C} algorithm was fully provided by him while the algorithm \ac{MA3C} and the games Simple States and Complex
+States have been developed by me.
+% TODO PONER EL MONTEZUMA
+
 \section{Simple States}
-%TODO PONER EL NUMERO DE THREADS
+
+I have compared the performance of both algorithms \ac{A3C} (\ffref{alg:A3C}) and \ac{MA3C} (\ffref{alg:MA3C}) in the game
+explained in \ffref{subsec:SimpleStates}.
+
+The hyperparameters used for both algorithms are:
+\begin{itemize}
+    \item The discount factor $\gamma = 0.99$.
+    \item Batch size $20$. %TODO EXPLAIN
+    \item The number of threads in which the algorithms have been parallelized is $8$.
+    \item Subtrees $K = 3$. (just for \ac{MA3C})
+    \item Entropy regularization term $\beta = 0.1$.
+    \item Value regularization term $ = 0.5$ %TODO PONER EN EL ALGORITMO
+\end{itemize}
 
 \section{Complex States}
 
 \section{Montezuma's Revenge}
-
+% TODO PONER EL NUMERO DE THREADS
+% TODO WE OR I BUT NOT BOTH
 %%% Local Variables: 
 %%% mode: latex
 %%% TeX-master: "../report"

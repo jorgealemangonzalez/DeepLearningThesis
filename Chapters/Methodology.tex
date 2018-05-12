@@ -129,9 +129,10 @@ The full algorithm with the few changes explained is shown in \ffref{alg:MA3C}
 \end{algorithm}
 
 \section{Environments}
-The ultimate goal of this thesis is to play Montezuma's revenge, but since it is a complex game I have developed two
-simpler environments.
-Both helped me to understand the pros and cons of \ac{A3C} and to develop a new version of this algorithm that uses subtasks.
+
+In order to demonstrate the capabilities of \ac{MA3C} over \ac{A3C} I have developed two simple environments where the
+weaknesses of the second one come to light.
+I have also compared the algorithms in a real game, Montezuma's Revenge, which has become famous because of its difficulty.
 
 \subsection{Simple States\label{subsec:SimpleStates}}
 
@@ -161,7 +162,7 @@ and door are represented with the following colors respectively: blue, grey, gre
 \label{fig:SimpleStates}
 \end{figure}
 
-As you can imagine the goal of the hero is to reach the door by going through the different checkpoints without colliding
+As you can imagine the goal of the hero is to reach the door by passing through the different checkpoints without colliding
 with any wall, the maximum score is 2.
 The game is organized in three different phases/states.
 The objective of the first one is to reach the checkpoint,
@@ -241,7 +242,7 @@ game is similar) while for \ac{MA3C} is easy.
 \subsection{Montezuma's Revenge\label{subsec:MontezumasRevenge}}
 
 \acf{MR} is an Atari game created in 1984 which recently has become famous because of its difficult,
-\ac{DQN} and \ac{A3C} algorithms get less than $100$ score on average when playing this game.
+\ac{DQN} and \ac{A3C} algorithms get less than $100$ score on average when playing this game (\cite{mnih2016A3C}).
 
 The hero, Panama Joe, goes into an Aztec pyramid full of treasures, traps and monsters.
 The game takes place inside the pyramid where there are different rooms with treasures he must collect.
@@ -251,15 +252,15 @@ through most of the rooms in order to collect a group of special gems which make
 
 \begin{figure}[hbtp]
 \begin{center}
-\includegraphics[width=300]{img/montezuma.png}
+\includegraphics[width=300]{img/montezuma_checkpoints.png}
 \end{center}
 \caption[Montezuma's Revenge game]
-{First screen of \acl{MR} game.
-The hero is in the starting position of the game.}
+{The hero is in the starting position of the game, in the first screen of \acl{MR}.
+Three yellow bullets have been added in order to represent checkpoints.}
 \label{fig:MontezumasRevenge}
 \end{figure}
 
-Since this game is really complex and computationally expensive to train I have made some changes on it.
+Since this game is really complex and computationally expensive to train, I have made some changes on it.
 \begin{itemize}
     \item In the hole game there are several screens but I will only use the first one in my experiments.
     \item The hero have multiple lives but I will consider he has just $1$ and, if he dies, I will reset the game.
@@ -268,7 +269,7 @@ Since this game is really complex and computationally expensive to train I have 
 \end{itemize}
 % TODO HABLAR SOBRE EL ALE o lo que use
 % TODO USO LA MEMORIA PARA OBTENER LA POSICIÓN DEL PERSONAJE
-The mechanics remain the same than in the original game.
+The procedures remain the same than in the original game.
 
 At each time step, the player can take 8 different actions: \textsc{Noop} (stay
 still), \textsc{Fire} (jump straight up), \textsc{Up}, \textsc{Right},
@@ -278,13 +279,12 @@ still), \textsc{Fire} (jump straight up), \textsc{Up}, \textsc{Right},
 There is one rope and three stairs with which the hero can go up and down.
 If he jumps into the rope he will grab it, not as with stairs.
 
-There are two things which the hero can die.
-The first one is by falling into the floor from some high position, for example from the rope.
-The second one is by touching the skull in the bottom, which is always moving left and right.
+The hero can die within two manners: by falling into the floor from some high position, for example from the rope;
+by touching the skull in the bottom, which is always moving left and right.
 
-The hero can gain score by collectig the key, which gives to him 100 points.
-He can also gain score by going through the checkpoints... %TODO PONER EN LA IMAGEN LOS CHECKPOINTS
-There are also
+The hero can gain score by collecting the key, which gives to him 100 points.
+He can also gain 10 points by passing through each of the checkpoints. %TODO QUE ANDERS RESPONDA A LO DE LAS OPTIONS
+I have manually added the checkpoints to guide the agent towards the key.
 
 The difficulty is due to the facility to die and the remoteness of the rewards.
 
