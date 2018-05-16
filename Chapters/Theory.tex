@@ -79,10 +79,10 @@ Sometimes an agent is not ``smart" enough to reach the environment rewards. In t
 Specifically, applying reward shaping to a \ac{MDP} is to modify its reward function $\mathcal{R}_a(s,s')$ getting a new one $\mathcal{R'}_a(s,s')$, the difference between them is defined by the
 \newconcept{shaping reward function}. More formally
 $\mathcal{R'}_a(s,s') = \mathcal{R}_a(s,s') + \mathcal{F}(s,a,s')$ where
-$\mathcal{F} : \mathcal{S} \times \mathcal{A} \times \mathcal{S} \rightarrow \R$ is a bounded real-valued function.
+$\mathcal{F} : \mathcal{S} \times \mathcal{A} \times \mathcal{S} \rightarrow \Re$ is a bounded real-valued function.
 
 The function $\mathcal{F}$ should be chosen using expert knowledge about the domain or in a general manner that works for any MDP. This choice should be made carefully, because modification in the rewards of the MDP should guide the agent to reach the same optimal policy $\pi^*$ (\ffref{subsec:policy}) and not another policy which is suboptimal for the original problem. To guarantee consistency with the optimal policy, $\mathcal{F}$ must be \newconcept{potential-based}. We say $\mathcal{F}$ is potential-based if there exists a real-valued function
-$\phi : \mathcal{S} \rightarrow \R$ such that for all $s \in \mathcal{S} \setminus \{s_0\} , a \in \mathcal{A}, s’ \in \mathcal{S}$
+$\phi : \mathcal{S} \rightarrow \Re$ such that for all $s \in \mathcal{S} \setminus \{s_0\} , a \in \mathcal{A}, s’ \in \mathcal{S}$
 \begin{equation}
     \mathcal{F}(s, a, s') = \gamma \phi(s') - \phi(s)
 \end{equation}
@@ -169,14 +169,14 @@ By minimizing this error $\delta_t$ the policy will trend to the optimal policy.
 The value function will also approximate more precisely future return values.
 
 
-\subsection{\aclp{SMDP}}
+\subsection{\aclp{SMDP}\label{subsec:SMDP}}
 
 A \ac{SMDP} is a framework for \newconcept{hierarchical reinforcement learning} in which actions are not atomic, in the sense that they
 do not last for just one time step, can be composed by several smaller actions and make decisions based on several states.
-
+%TODO CAMBIAR BETA AQUI O EN EL PARAMETRO DEL A3C SINO PUEDE SER CONFUSO
 This complex actions are named options and can be expressed as a tuple $\langle \mathcal{I}, \pi, \beta \rangle$ where
 $\mathcal{I}$ is the set of initial states
-where the option is available, $\pi$ is the policy that defines which actions must be taken inside the option and $\beta$ is a
+in which the option is available, $\pi$ is the policy that defines which actions must be taken inside the option and $\beta$ is a
 probability distribution over states of the option being interrupted.
 More formally, a Markov option is made up by:
 \begin{itemize}

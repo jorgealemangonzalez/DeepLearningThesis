@@ -14,7 +14,7 @@ I have compared the performance of both algorithms \ac{A3C} (\ffref{alg:A3C}) an
 States game (\ffref{subsec:SimpleStates}).
 
 The hyperparameters used for both algorithms are:
-\begin{itemize} % TODO PROGUNTAR A MIQUEL QUE FALTA
+\begin{itemize} % TODO PROGUNTAR A MIQUEL QUE FALTA Y SI PONER EL VALUE REGULARIZATION
     \item The discount factor $\gamma = 0.99$.
     \item Batch size $20$. %TODO EXPLAIN
     \item The number of threads in which the algorithms have been parallelized is $8$.
@@ -58,6 +58,23 @@ The subtree changes can be done in any state and the optimal policies will remai
 after reaching that states.
 
 \section{Complex States}
+
+Thanks to the results obtained with Simple States game I realized that \ac{MA3C} may have no problem by acting differently
+in two really similar states.
+As far as the image is
+I have compared the performance of both algorithms \ac{A3C} (\ffref{alg:A3C}) and \ac{MA3C} (\ffref{alg:MA3C}) in Complex
+States game (\ffref{subsec:SimpleStates}).
+
+\begin{figure}[hbtp]
+\begin{center}
+\includegraphics[width=250]{img/ComplexStates_performance.png}
+\end{center}
+\caption[Complex States performance]
+{Average score over $5$ runs of \ac{A3C} and \ac{MA3C} algorithms in Complex States environment (1M steps/actions).
+The shadow represents maximum and minimum values of those $5$ runs.
+The graphics have been smoothed by a moving average with a $20$ steps window.}%TODO OUTLIER
+\label{fig:ComplexStates_performance}
+\end{figure}
 
 \section{Montezuma's Revenge}
 % TODO PONER EL NUMERO DE THREADS
