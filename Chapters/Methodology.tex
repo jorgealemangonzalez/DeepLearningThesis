@@ -134,6 +134,10 @@ In order to demonstrate the capabilities of \ac{MA3C} over \ac{A3C} I have devel
 weaknesses of the second one come to light.
 I have also compared the algorithms in a real game, Montezuma's Revenge, which has become famous because of its difficulty.
 
+This three environment have been used through a useful toolkit called OpenAi Gym (\cite{gym}), in which the different games
+can be accessed by a common interface facilitating the process of analyzing different algorithms and games.
+
+
 \subsection{Simple States\label{subsec:SimpleStates}}
 
 This game is made by a $6 \times 10$ grid of square blocks.
@@ -194,7 +198,6 @@ describing components of the tuple $\langle\mathcal{S}, \mathcal{A}_s, \mathcal{
 The purpose of creating this game is to prove that the \ac{MA3C} algorithm (\ffref{subsec:MA3C}) has better exploration
 skills than A3C (\ffref{subsec:A3C}).
 
-% TODO INCLUDE OPTIONS SIN SABER LAS ACCIONES INTERMEDIAS?
 % TODO PONER QUE CUMPLE LA MARKOV PROPERTY?
 \subsection{Complex States\label{subsec:ComplexStates}}
 
@@ -240,7 +243,8 @@ The purpose of creating this game is to prove that \ac{A3C} is quite bad going b
 game is similar) while for \ac{MA3C} is easy.
 
 \subsection{Montezuma's Revenge\label{subsec:MontezumasRevenge}}
-
+%TODO COMPROBAR SI ESTA ESCRITO MONTEZUMAS REVENGE SIN ACRONIMO
+We wanted to test \ac{MA3C} in an environment which other authors also did a research on.
 \acf{MR} is an Atari game created in 1984 which recently has become famous because of its difficult,
 \ac{DQN} and \ac{A3C} algorithms get less than $100$ score on average when playing this game (\cite{mnih2016A3C}).
 
