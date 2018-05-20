@@ -25,7 +25,7 @@ The hyperparameters used for both algorithms are:
 \end{itemize}
 
 This parameters have been chosen in order to show the disadvantages of \ac{A3C} as opposed to \ac{MA3C}.
-There might be another combination of hyperparameters in which, at the end, both algorithms converge to the same solution.
+There might be a different combination of hyperparameters in which, at the end, both algorithms converge to the same solution.
 Since the ultimate goal is to show how \ac{MA3C} explores better, this hyperparameters are good enough.
 
 \begin{figure}[hbtp]
@@ -45,7 +45,7 @@ reaches the checkpoint but then hits a wall.
 
 This is due to the subtree changes which the algorithm makes every time it goes through any of the checkpoints (normal
 and hidden).
-Every time the change happens the data in the common network changes in a different manner (the direction of the gradient)
+Every time the change happens the data in the common network changes in a different manner (the direction of the gradient) %TODO NO HE HABLADO DEL GRADIENTE , QUITAR?
 until it converges to common features for all subtrees.
 Thanks to that the randomness is implicitly increased every time the change happens until convergence is achieved.
 And, as far as more random actions lead to better exploration, this algorithm is using the subgoals (checkpoints) in
@@ -125,10 +125,24 @@ The shadow represents maximum and minimum values of those $5$ smoothed runs.}
 \label{fig:Montezuma_performance}
 \end{figure}
 
-%TODO HABLAR DE LAS OPTIONS
-The results show that the learning process of \ac{MA3C} is faster than \ac{A3C}, meaning that ,even in complex environments
-as this one is, the main knowledge can be resumed in the first layers and changing the subtree is useful to model different
-subgoals.
+As explained in \ffref{subsec:MontezumasRevenge}, the algorithm is learning the different options of the problem (which are
+being executed one after the other).
+After doing an 80 million steps training, it was able to reach the third checkpoint (Lstairs) in many runs, while reaching
+the key in just a few of them.
+So it successfully learned the policies of options $o_0$, $o_1$ and $o_2$, and it was trying to learn $o_3$.
+This is not fully true because the reward of completing $o_3$ is 110 while the others rewards are just 10, but we can
+affirm that with this training process we obtain policies which reach Lstairs with high probability.
+As in the other experiments, there might be a different combination of hyperparameters which performs better than in this experiment,
+but this ones are good enough to show the differences between both algorithms.
+
+% TODO VER QUE TODAS LAS GRAFICAS SE QUEDEN BIEN
+% TODO IT O HE PARA REFERIRSE A LOS ALGORITMOS PERO NO AMBAS.
+
+As can be seen in \ffref{fig:Montezuma_performance}, the learning process of \ac{MA3C} is faster than \ac{A3C}.
+Even in complex environments as this one is, the main knowledge can be resumed in the first layers and changing the
+subtree is useful to model different subgoals/options.
+The \ac{MA3C} curve is also less noisy than \ac{A3C}, which means that this algorithm is less susceptible to
+behaviour changes during the learning process.
 
 %%% Local Variables: 
 %%% mode: latex

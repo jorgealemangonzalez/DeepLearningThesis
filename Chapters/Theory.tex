@@ -63,7 +63,7 @@ We have defined the goal of the agent, that is to maximize the total reward obta
 Where $r_T$ is the reward obtained in some terminal state. In continual tasks the
 time step $T = \infty$ so the return, which is what we are trying to maximize, will also be infinite. To avoid this problem we must introduce
 the \newconcept{discounted return}, which adds in a discount factor $\gamma$. This factor modifies the previous formulation in the following way:
-\begin{equation}
+\begin{equation\label{eq:return}}
     R_t = r_{t+1} + \gamma r_{t+2} + \gamma^2 r_{t+3} + \dots = \sum_{k=0}^\infty\gamma^k r_{t+k+1}
 \end{equation}
 where $\gamma$ is a parameter, $0 \leq \gamma \leq 1$. Observe that as $k$ approaches infinity
@@ -313,7 +313,7 @@ Another way of reducing the number of computations is by reducing the number of 
 in just one node.
 
 \subsection{Transfer learning in \aclp{ANN} \label{subsec:TransferLearning}}
-The aim of \newconcept{transfer learning} techniques is to improve the learning process of a new task given some previous knowledge
+The aim of \newconcept{transfer learning} techniques is to improve the learning process of a new task, given some previous knowledge
 about related tasks.
 Neural networks, especially the deepest ones, need tons of data to adjust their weights to successfully perform some tasks.
 
@@ -394,7 +394,7 @@ Where $\theta_i$ and $\theta^-_i$ are the wights of two neural networks with the
 $\theta_i$ is updated each training step while $\theta^-_i$ only change when the iteration finish, following
 $\theta_i = \theta^-_i$ after this happens.
 
-This network has successfully surpass human-level skills in many atari games.
+This network has successfully surpass human-level skills in many Atari games.
 But in Montezuma's Revenge it was unable to obtain any score (see \ffref{subsec:MontezumasRevenge}).
 
 \subsection{\acl{A3C}\label{subsec:A3C}}
