@@ -2,23 +2,23 @@
 
 \section{Algorithms}
 
-I have modified \ac{A3C} algorithm in order to take advantage of sub-task with the purpose of enhancing training speed
+I have modified the \ac{A3C} algorithm in order to take advantage of sub-tasks with the purpose of enhancing training speed
 and exploration.
-I refer to this new algorithm \acf{MA3C} and in this section you will find specifications about the architectures of
+I refer to this new algorithm as \acf{MA3C} and in this section you will find specifications about the architectures of
 both \acp{ANN}: \ac{A3C} and \ac{MA3C}.
 In addition I will explain the \ac{MA3C} algorithm.
 
-They have been developed using tensorflow (\cite{tensorflow2015}), an open source machine learning framework which I find
+They have been developed using tensorflow (\cite{tensorflow2015}), an open source machine learning framework which I find %TODO evita dar opiniones, pon datos de papers mejor
 really useful to implement deep learning algorithms.
 
 \subsection{\acl{A3C}\label{subsec:AlgorithmA3C}}
 
-As I explained previously (\ffref{subsec:A3C}) this algorithm uses the image of the environment to represent the state.
+As I have explained previously (\ffref{subsec:A3C}), this algorithm uses the image of the environment to represent the state.
 I have used almost the same preprocessing and network architecture (\ffref{fig:A3C}) than in \citetitle{mnih2016A3C} (\cite{mnih2016A3C}).
-In practice the images of any game are resized to $84 \times 84$ greyscale pixels in order to reduce the computational cost of training,
+In practice, the images of any game are resized to $84 \times 84$ greyscale pixels in order to reduce the computational cost of training,
 specifically the input dimensionality, and also to fit the convolutions.
-The algorithm applies this preprocessing to 4 stacked frames allowing the neural network to implicitly zcalculate the movement
-of the different pixels/ objects on the screen.
+The algorithm applies this preprocessing to 4 stacked frames allowing the neural network to implicitly calculate the movement %TODO cambiar todo Neural Networks por NN
+of the different pixels/objects on the screen.
 There is a frame skip of 4, which means that, only one out of four consecutive frames is taken into account and stacked.
 There is also a component-wise maximum selection over two consecutive frames, the one stacked and the next one which will
 not be stacked.
@@ -27,7 +27,7 @@ This is just for Atari games, in Simple States (\ffref{subsec:SimpleStates}) and
 the RGB channels of a single frame are used instead.
 The dimensionality of the input layer in that games is $84 \times 84 \times 3$.
 
-There are several hidden layers specifically designed for obtaining high level abstractions of the environment frames.
+There are several hidden layers specifically designed to obtain high level abstractions of the environment frames.
 The first one is a convolutional layer (\ffref{subsec:CNN}) with $16$ filters with kernel dimension $8 \times 8$ and stride $4$,
 followed by a \ac{ReLU} layer.
 The second layer is also a convolutional layer, but with $32$ filters with kernel dimension $4 \times 4$ and stride 2,
@@ -64,15 +64,15 @@ This algorithm is strongly associated with hierarchial reinforcement learning, s
 \label{fig:MA3C}
 \end{figure}
 
-As you can see in \ffref{fig:MA3C} the architecture is very similar to \ac{A3C}.
+As we can see in \ffref{fig:MA3C} the architecture is very similar to \ac{A3C}.
 There is an input layer of size $84 \times 84 \times 4$, a convolutional layer with $16\; 8 \times 8$ filters, another
 convolutional layer with $32 \; 4 \times 4$ filters and a fully connected layer with $256$ nodes.
 The output layer is made up by $K$ copies of the \ac{A3C} output layer, where $K = k-1$ is an hyperparameter which might be
-different depending on the problem or the use case.
+different depending on the problem or the use case. %TODO no se entiende este or the use case
 For each of the games I have set $K$ to a different value: with Simple States I have used $K=3$, with Complex States
 $K=2$ and with Montezuma's Revenge $K=4$.
 The first two depend on the number of phases (see \ffref{subsec:SimpleStates} and \ffref{subsec:ComplexStates}) and the last one
-depend on the number of intermediate rewards (see \ffref{subsec:MontezumasRevenge}).
+depends on the number of intermediate rewards (see \ffref{subsec:MontezumasRevenge}).
 
 The architecture of \ac{MA3C} contains multiple \newconcept{subtrees} defining different \acl{AC} approaches to the given input state,
 each one connected to the high level features (last layer) but not between them.
@@ -84,15 +84,15 @@ Given that every subtree is used to solve a different task inside a bigger probl
 extract as much information as possible about the general problem, while the weights of each subtree will be optimized to
 succeed in the specific task.
 
-The update function, advantage function and algorithm of \ac{MA3C} remain the same ones that in \ac{A3C} (\ffref{subsec:A3C}).
+The update function, advantage function and algorithm of \ac{MA3C} remain the same ones as in \ac{A3C} (\ffref{subsec:A3C}).
 The only difference is that this one selects the chunk of the parameter vectors $\theta'$ and $\theta_{v}'$ that will be updated
 depending on the currently active subtree.
-The method which selects one subtree or another is arbitrary, they might be selected with a \ac{AI} method, just
-with a couple of rules or just be a piece of the state.
-In this thesis I have used two approaches: part of the state, in Simple States (\ffref{subsec:SimpleStates}) and Complex States
+The method which selects one subtree or another is arbitrary, they might be selected with an \ac{AI} method, just
+with a couple of rules or just be a piece of the state. %TODO la ultima parte or just be a piece of the state no tiene sentido leyendo la frase completa
+For this thesis I have used two approaches: part of the state, in Simple States (\ffref{subsec:SimpleStates}) and Complex States
 (\ffref{subsec:ComplexStates}); and some rules about the position of the hero in Montezuma's Revenge (\ffref{subsec:MontezumasRevenge}).
 
-The full algorithm with the few changes explained is shown in \ffref{alg:MA3C}
+The full algorithm with the few changes explained is shown in \ffref{alg:MA3C}. %TODO yo diria The full modified algorithm
 
 \begin{algorithm}[hbtp]
 \begin{algorithmic}
@@ -162,7 +162,7 @@ This are the different types:
 \end{center}
 \caption[Simple States game]
 {The hero navigating through a hostile environment trying to reach the door. The wall, hero, checkpoint, hidden checkpoint
-and door are represented with the following colors respectively: blue, grey, green, turquoise and violet}
+and door are represented with the following colors respectively: blue, grey, green, turquoise and violet.}
 \label{fig:SimpleStates}
 \end{figure}
 
@@ -172,7 +172,7 @@ The game is organized in three different phases/states.
 The objective of the first one is to reach the checkpoint,
 of the second one, the hidden checkpoint and in the third one, the door.
 The information about the current phase is available
-to the player.
+to the player. %TODO reescribe este parrafo entero
 
 In order to solve this game with both \ac{A3C} and \ac{MA3C} algorithms we must model it as a \ac{SMDP} problem,
 describing components of the tuple $\langle\mathcal{S}, \mathcal{A}_s, \mathcal{P}_a(s,s'), \mathcal{R}_a(s,s'), \gamma \rangle$.
@@ -204,10 +204,10 @@ skills than A3C (\ffref{subsec:A3C}).
 This game is really similar to the previous one but the dynamics are a bit different.
 The hero must follow a series of steps to reach the door.
 The order in which the hero must go through the objects is: checkpoint, hidden checkpoint, door, hidden checkpoint,
-checkpoint, door.
+checkpoint, door. %TODO quizas representaria el orden con flechas o otra cosa en vez de comas
 We force the hero to go back on his own steps when he reaches the door.
 In this game some of the rewards also change.
-This are the changes respect to Simple States game, the rest remains equal:
+These are the changes with respect to the Simple States game, the rest remains equal:
 \begin{itemize}
     \item \newconcept{checkpoint}: The first time that the hero goes through this object he obtains a reward of 1.
     Then he must follow the rest of the path described above to obtain again 1 of score (after the second time he visits the hidden checkpoint).
@@ -225,18 +225,18 @@ This are the changes respect to Simple States game, the rest remains equal:
 \end{center}
 \caption[Complex States game]
 {The hero after reaching the door for first time. The wall, hero, checkpoint, hidden checkpoint
-and door are represented with the following colors respectively: blue, grey, green, turquoise and violet}
+and door are represented with the following colors respectively: blue, grey, green, turquoise and violet.}
 \label{fig:ComplexStates}
 \end{figure}
 
 
 In this game there are only two phases.
 The first one goes from the start until the first time the hero reaches the door.
-The second one finish the second time it reaches the door.
+The second one finishes the second time it reaches the door.
 As in Simple States the hero must follow the path in order to obtain the rewards and finish the game.
 The information about the current phase is also available to the player.
 
-The \ac{MDP} problem of this game is exactly the same that in Simple States (\ffref{subsec:SimpleStates}).
+The \ac{MDP} problem of this game is exactly the same as in Simple States (\ffref{subsec:SimpleStates}).
 The only thing that changes are the rules of rewards and phases which I have already defined.
 
 The purpose of creating this game is to prove that \ac{A3C} is quite bad going back on his own steps (when the image of the
@@ -245,11 +245,11 @@ game is similar) while for \ac{MA3C} is easy.
 \subsection{Montezuma's Revenge\label{subsec:MontezumasRevenge}}
 %TODO COMPROBAR SI ESTA ESCRITO MONTEZUMAS REVENGE SIN ACRONIMO
 We wanted to test \ac{MA3C} in an environment which other authors also did a research on.
-\acf{MR} is an Atari game created in 1984 which recently has become famous because of its difficult,
+\acf{MR} is an Atari game created in 1984 which recently has become famous because of its difficulty.
 \ac{DQN} and \ac{A3C} algorithms get less than $100$ score on average when playing this game (\cite{mnih2016A3C}).
 
 The hero, Panama Joe, goes into an Aztec pyramid full of treasures, traps and monsters.
-The game takes place inside the pyramid where there are different rooms with treasures he must collect.
+The game takes place inside the pyramid where there are different rooms with the treasures he must collect.
 In order to navigate from a room to another he must collect keys and open doors while avoiding traps and monsters.
 It is a relatively big game (24 rooms) where the agent starts in screen 1 (\ffref{fig:MontezumasRevenge}) and must navigate
 through most of the rooms in order to collect a group of special gems which make him win the game.
@@ -260,49 +260,47 @@ through most of the rooms in order to collect a group of special gems which make
 \end{center}
 \caption[Montezuma's Revenge game]
 {The hero is in the starting position of the game, in the first screen of \acl{MR}.
-Three yellow bullets have been added in order to represent checkpoints.}
+Three yellow bullets have been added in order to represent the checkpoints.}
 \label{fig:MontezumasRevenge}
 \end{figure}
 
-Since this game is really complex and computationally expensive to train, I have made some changes on it.
+Since this game is really complex and computationally expensive to train, I have made some changes to it.
 \begin{itemize}
     \item In the hole game there are several screens but I will only use the first one in my experiments.
-    \item The hero have multiple lives but I will consider he has just $1$ and, if he dies, the game will be reset.
-    \item When the hero reaches the key I will also reset the game.
-    So the unique goal of the hero is to take that object.
+    \item The hero has multiple lives but I will consider he has just $1$ and, if he dies, the game will be reset.
+    \item When the hero reaches the key I will also reset the game, so the unique goal of the hero is to take that object.
 \end{itemize}
-Nevertheless, the procedures remain the same than in the original game.
+Nevertheless, the procedures remain the same as in the original game.
 
 At each time step, the player can take 8 different actions: \textsc{Noop} (stay
 still), \textsc{Fire} (jump straight up), \textsc{Up}, \textsc{Right},
 \textsc{Left}, \textsc{Down}, \textsc{LeftFire} (jump to the left),
 \textsc{RightFire}.
 
-There is one rope and three stairs with which the hero can go up and down.
-If he jumps into the rope he will grab it, not as with stairs.
+There are one rope and three stairs with which the hero can go up and down.
+If he jumps into the rope he will grab it, not as with stairs. %TODO No se entiende la ultima frase
 From now on I will refer to the right stairs as \newconcept{Rstairs} and to left ones \newconcept{Lstairs}.
-I will later use the position (in screen space) of the objects, which are the following:
+I will use later the position (in screen space) of the objects, which are the following:
 \begin{itemize}
     \item rope: from $(109, 174)$ to $(109, 212)$
     \item Rstairs: $(133, 148)$
     \item Lstairs: $(21, 148)$
     \item key: $(14, 209)$
 \end{itemize}
-In order to obtain this positions, and the agent's position, I used the memory layout described in \citetitle{adriaTFG}
+In order to obtain this positions, and the agent's position, I have used the memory layout described in \citetitle{adriaTFG}
 (\cite{adriaTFG}).
 
-The hero can die within two manners: by falling into the floor from some high position, for example from the rope;
-by touching the skull in the bottom, which is always moving left and right.
+The hero can die within two manners: by falling into the floor from some high position (e.g. from the rope) or by touching the skull in the bottom, which is always moving left and right. %TODO siempre que quieras poner por ejemplo usa e.g. (busca lo que son e.g. y i.e. y usalos siempre)
 
-The hero can obtain score by collecting the key, which gives to him 100 points.
+The hero can obtain a score by collecting the key, which gives him 100 points.
 He can also win 10 points by passing through each of the checkpoints which I have manually added to guide the agent
 towards the key.
-Since they have been selected in order to guide the agent towards $\pi^*$ this is way of applying reward shaping
+Since they have been selected in order to guide the agent towards $\pi^*$ this is a way of applying reward shaping
 (\ffref{subsec:RewardShaping}) to Montezuma's Revenge.
 The potential function $\phi(s)$ is defined in the following way:
 \begin{equation}
     \State \phi(s) = \begin{cases}
-                 10, & \text{hero visits for first time positions: rope, Rstairs, Lstairs, key} \\
+                 10, & \text{hero visits for the first time the positions: rope, Rstairs, Lstairs, key} \\
                  0,  & \text{otherwise} \\
             \end{cases}
 \end{equation}
@@ -365,13 +363,13 @@ The action set available inside each option is
 $\mathcal{A}_s = \{\textsc{Noop}, \textsc{Fire}, \textsc{Up}, \textsc{Right}, \textsc{Left},$
 $\textsc{Down}, \textsc{LeftFire}, \textsc{RightFire}\}$.
 As you may realize by defining the options in this way we divide the problem in 4 phases from which, once
-you change to the next, its impossible to go back to another previous option/phase.
+you change to the next, it is impossible to go back to another previous option/phase. %TODO tenias puesto its, no poner contracciones nunca
 This simplifies the game, being really similar to Simple States and Complex States games.
 
 %TODO EL K DE AQUI ES DISTINTO AL DE MA3C
 As far as the agent will learn how to act inside the option, we cannot accurately define $ P_o(s,s') $ and $ R_o(s) $.
 This is because the number of steps $k$ depends on the policy of the option.
-But we can say that options $o_0, o_1$ and $o_2$ have a reward $r_{t+k} = 10$ while $o_3$ have a reward $r_{t+k} = 110$,
+But we can say that options $o_0, o_1$ and $o_2$ have a reward $r_{t+k} = 10$ while $o_3$ has a reward $r_{t+k} = 110$,
 that is, the score given by the key and by the checkpoint.
 
 The discount factor $\gamma$ is $0.99$.
