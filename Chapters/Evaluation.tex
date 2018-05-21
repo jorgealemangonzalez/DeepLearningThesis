@@ -1,17 +1,16 @@
 \chapter{Evaluation}
 
-In this chapter I will supply enough evidence about how the \ac{MA3C} algorithm learns faster and explores better than
+In this chapter we will supply enough evidence about how the \ac{MA3C} algorithm learns faster and explores better than
 \ac{A3C} in environments where subgoals can be defined.
 All the code needed to make the following analysis was developed inside a project of the Universidad Pompeu Fabra researcher
 Miquel Juyent.
 The \ac{A3C} algorithm was fully provided by him while the algorithm \ac{MA3C} and the games Simple States and Complex
 States have been developed by me.
 The seed to initialize the weights of the different networks where randomly chosen in each of the experiments and runs.
-% TODO PONER EL MONTEZUMA
 
 \section{Simple States}
 
-I have compared the performance of both algorithms \ac{A3C} (\ffref{alg:A3C}) and \ac{MA3C} (\ffref{alg:MA3C}) in Simple
+We have compared the performance of both algorithms \ac{A3C} (\ffref{alg:A3C}) and \ac{MA3C} (\ffref{alg:MA3C}) in Simple
 States game (\ffref{subsec:SimpleStates}).
 
 The hyperparameters used for both algorithms are:
@@ -21,7 +20,7 @@ The hyperparameters used for both algorithms are:
     \item The number of threads in which the algorithms have been parallelized is $8$.
     \item Subtrees $K = 3$. (just for \ac{MA3C})
     \item Entropy regularization term $\beta = 0.1$.
-    \item Value regularization term $ = 0.5$ %TODO PONER EN EL ALGORITMO
+    \item Value regularization term $ = 0.5$. %TODO PONER EN EL ALGORITMO
 \end{itemize}
 
 This parameters have been chosen in order to show the disadvantages of \ac{A3C} as opposed to \ac{MA3C}.
@@ -75,7 +74,7 @@ It is important to mention that in this game there is no hidden checkpoint, so t
 \end{center}
 \caption[Complex States performance]
 {Average score over $5$ runs of \ac{A3C} and \ac{MA3C} algorithms in Complex States environment (1M steps/actions).
-The best run that I obtained with \ac{A3C} is shown as an outlier because it was the only run in which I was able to get
+The best run that we obtained with \ac{A3C} is shown as an outlier because it was the only run in which we were able to get
 reward $6$.
 The graphics have been smoothed by a moving average with a $20$ steps window.
 The shadow represents maximum and minimum values of those $5$ smoothed runs.}
@@ -102,7 +101,6 @@ while learning how to reach the new goal.
 
 
 \section{Montezuma's Revenge}
-% TODO WE OR I BUT NOT BOTH
 % TODO PODRÍA HACER UN EXPERIMENTO SIN REWARD SHAPING PERO CAMBIANDO DE SUBTREE A VER QUE SALE
 
 The hyperparameters selected are almost the same than in Simple States and Complex States, the only ones that change are

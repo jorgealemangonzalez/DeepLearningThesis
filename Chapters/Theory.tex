@@ -3,7 +3,7 @@
 \section{\aclp{RL}}
 Reinforcement learning is an area of \acf{ML} that models a problem focusing on maximizing a numerical reward. To achieve this, the agent obtains a representation of the situation of the problem, named \newconcept{state}; then selects an \newconcept{action}; interacts with the environment, by applying that action; and finally it may obtain some \newconcept{reward}. After all this process the situation of the problem changes and the agent finds itself a new state. Repeating this steps several times, the agent should explore the different states of the problem and learn how to map situations to actions with the purpose of maximizing the reward.
 
-The learning process is usually organized in \newconcept{episodes}. Each episode is composed by an initial state $s_0$ , the first one that the environment generates; intermediate states $s_t$ ; and may have several final states, which establish the end of an episode. The agent's goal is to maximize the total amount of reward it receives in a complete episode. When an episode ends the the environment resets and starts again from $s_0$ or some other initial state that belongs to the set of initial states. In some cases the agent interacts infinitely without reaching any terminal state, we call this \newconcept{continual tasks}.
+The learning process is usually organized in \newconcept{episodes}. Each episode is composed by an initial state $s_0$, the first one that the environment generates; intermediate states $s_t$ ; and may have several final states, which establish the end of an episode. The agent's goal is to maximize the total amount of reward it receives in a complete episode. When an episode ends the the environment resets and starts again from $s_0$ or some other initial state that belongs to the set of initial states. In some cases the agent interacts infinitely without reaching any terminal state, we call this \newconcept{continual tasks}.
 
 One of the challenging aspects of reinforcement learning is the tradeoff between \newconcept{exploration} and \newconcept{exploitation}. In the kind of environments this thesis is focused on, the actions applied affect not only immediate rewards but also future ones. This implies that taking actions with high immediate reward is not always the best choice, there might be some series of actions with which it obtains higher rewards in the future. In reinforcement learning, the agent should exploit immediate rewards in order to obtain feedback of how is it performing. Nevertheless, it may also explore different actions that do not have as high immediate reward in order to find higher future rewards.
 
@@ -72,6 +72,8 @@ then this new formulation converges, not like the previous one. The discount fac
 related to how farther rewards should be taken into account or not. If we use a value near 0 then the algorithm
 is capable to rewards that are few time steps away.
 
+%TODO n-step return sutton and barto (section 7.1)
+
 \subsection{Reward shaping\label{subsec:RewardShaping}}
 
 Sometimes an agent is not ``smart" enough to reach the environment rewards. In this scenario some new rewards can be added to guide the agent towards the original rewards.
@@ -82,7 +84,7 @@ $\mathcal{R'}_a(s,s') = \mathcal{R}_a(s,s') + \mathcal{F}(s,a,s')$ where
 $\mathcal{F} : \mathcal{S} \times \mathcal{A} \times \mathcal{S} \rightarrow \Re$ is a bounded real-valued function.
 
 The function $\mathcal{F}$ should be chosen using expert knowledge about the domain or in a general manner that works for any MDP. This choice should be made carefully, because modification in the rewards of the MDP should guide the agent to reach the same optimal policy $\pi^*$ (\ffref{subsec:policy}) and not another policy which is suboptimal for the original problem. To guarantee consistency with the optimal policy, $\mathcal{F}$ must be \newconcept{potential-based}. We say $\mathcal{F}$ is potential-based if there exists a real-valued function
-$\phi : \mathcal{S} \rightarrow \Re$ such that for all $s \in \mathcal{S} \setminus \{s_0\} , a \in \mathcal{A}, s’ \in \mathcal{S}$
+$\phi : \mathcal{S} \rightarrow \Re$ such that for all $s \in \mathcal{S} \setminus \{s_0\}, a \in \mathcal{A}, s’ \in \mathcal{S}$
 \begin{equation}
     \mathcal{F}(s, a, s') = \gamma \phi(s') - \phi(s)
 \end{equation}
@@ -139,7 +141,7 @@ There is a more general version of this algorithm called \newconcept{n-step Q-le
 \begin{equation}
     Q(s_t,a_t)\leftarrow Q(s_t,a_t) + \alpha [\;\sum^{n-1}_{i=0}\gamma^i r_{t+i} + \gamma^n \max_a Q(s_{t+n},a) - Q(s_t,a_t)]
 \end{equation}
-This make sense when the action taken in states $t, t+1,\dots , t+n-1$ and their respective rewards are known.
+This make sense when the action taken in states $t, t+1,\dots, t+n-1$ and their respective rewards are known.
 
 \subsection{Actor Critic\label{subsec:AC}}
 It is a different representation of the agent-environment interface where the agent is splitted into policy and value
@@ -174,6 +176,7 @@ The value function will also approximate more precisely future return values.
 A \ac{SMDP} is a framework for \newconcept{hierarchical reinforcement learning} in which actions are not atomic, in the sense that they
 do not last for just one time step, can be composed by several smaller actions and make decisions based on several states.
 %TODO CAMBIAR BETA AQUI O EN EL PARAMETRO DEL A3C SINO PUEDE SER CONFUSO
+
 This complex actions are named options and can be expressed as a tuple $\langle \mathcal{I}, \pi, \beta \rangle$ where
 $\mathcal{I}$ is the set of initial states
 in which the option is available, $\pi$ is the policy that defines which actions must be taken inside the option and $\beta$ is a
@@ -196,11 +199,11 @@ states and actions taken in that option to select the next action and the end co
 So in both $\pi$ and $\beta$ instead of
 using $\mathcal{S}$ it uses $\Omega$ which is the set of all histories $h_{t\tau}$ defined as follows:
 \begin{equation}
-    h_{t\tau} = \{s_t,a_t,r_{t+1},s_{t+1},a_{t+1}, ... , r_\tau, s_\tau\}
+    h_{t\tau} = \{s_t,a_t,r_{t+1},s_{t+1},a_{t+1}, ..., r_\tau, s_\tau\}
 \end{equation}
 Where $\tau$ is the holding time of the option, thus is, the amount of time steps it takes to complete.
 Finally the three components of a semi-Markov option are:
-$\pi : \Omega \times \mathcal{A} \rightarrow [0,1]$ , $ \beta : \Omega \rightarrow [0,1]$ and
+$\pi : \Omega \times \mathcal{A} \rightarrow [0,1]$, $ \beta : \Omega \rightarrow [0,1]$ and
 $\mathcal{I} \subseteq \mathcal{S}$
 
 A \ac{SMDP} is a variation of an \ac{MDP} where the set of actions $\mathcal{A}_s$ is made up by semi-Markov options.
@@ -209,7 +212,7 @@ A \ac{SMDP} problem can be expressed as a tuple $\left< \mathcal{S}, \mathcal{O}
     \item $\mathcal{S}$ is the state space
     \item $\mathcal{O}_s$ is the set of possible options available in state $s$.
     \item $P_o(s,s')$  is the likelihood of reaching state $s' \in \mathcal{S}$ from state $s \in \mathcal{S}$ when taking
-    option $o \in \mathcal{O}_s$ , discounted depending on the time taken to reach it.
+    option $o \in \mathcal{O}_s$, discounted depending on the time taken to reach it.
     \begin{equation}
         P_o(s,s') = \sum_{k=1}^\infty p(s', k) \gamma^k
     \end{equation}
@@ -378,7 +381,7 @@ This is caused by the weight updates, that changes not only the result of som ac
 the correlation present in sequence of observations;
 and the correlations between the action-values and target values.
 For that reason, apart from the \ac{ANN}, they used an experience replay ($E$).
-This structure saves last $T$ states which the environment has gone by in the format $e_t=(s_t ,a_t , r_t , s_{t+1})$.
+This structure saves last $T$ states which the environment has gone by in the format $e_t=(s_t, a_t, r_t, s_{t+1})$.
 Then it picks in an uniformly random manner from this set to train the network.
 Training on independent and identically distributed samples helps reducing the instability generated by the neural network.
 

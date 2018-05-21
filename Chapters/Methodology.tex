@@ -2,19 +2,19 @@
 
 \section{Algorithms}
 
-I have modified the \ac{A3C} algorithm in order to take advantage of sub-tasks with the purpose of enhancing training speed
+We have modified the \ac{A3C} algorithm in order to take advantage of sub-tasks with the purpose of enhancing training speed
 and exploration.
-I refer to this new algorithm as \acf{MA3C} and in this section you will find specifications about the architectures of
+We refer to this new algorithm as \acf{MA3C} and in this section you will find specifications about the architectures of
 both \acp{ANN}: \ac{A3C} and \ac{MA3C}.
-In addition I will explain the \ac{MA3C} algorithm.
+In addition we will explain the \ac{MA3C} algorithm.
 
-They have been developed using tensorflow (\cite{tensorflow2015}), an open source machine learning framework which I find %TODO evita dar opiniones, pon datos de papers mejor
+They have been developed using tensorflow (\cite{tensorflow2015}), an open source machine learning framework which we find %TODO evita dar opiniones, pon datos de papers mejor
 really useful to implement deep learning algorithms.
 
 \subsection{\acl{A3C}\label{subsec:AlgorithmA3C}}
 
-As I have explained previously (\ffref{subsec:A3C}), this algorithm uses the image of the environment to represent the state.
-I have used almost the same preprocessing and network architecture (\ffref{fig:A3C}) than in \citetitle{mnih2016A3C} (\cite{mnih2016A3C}).
+As we have explained previously (\ffref{subsec:A3C}), this algorithm uses the image of the environment to represent the state.
+We have used almost the same preprocessing and network architecture (\ffref{fig:A3C}) than in \citetitle{mnih2016A3C} (\cite{mnih2016A3C}).
 In practice, the images of any game are resized to $84 \times 84$ greyscale pixels in order to reduce the computational cost of training,
 specifically the input dimensionality, and also to fit the convolutions.
 The algorithm applies this preprocessing to 4 stacked frames allowing the neural network to implicitly calculate the movement %TODO cambiar todo Neural Networks por NN
@@ -69,7 +69,7 @@ There is an input layer of size $84 \times 84 \times 4$, a convolutional layer w
 convolutional layer with $32 \; 4 \times 4$ filters and a fully connected layer with $256$ nodes.
 The output layer is made up by $K$ copies of the \ac{A3C} output layer, where $K = k-1$ is an hyperparameter which might be
 different depending on the problem or the use case. %TODO no se entiende este or the use case
-For each of the games I have set $K$ to a different value: with Simple States I have used $K=3$, with Complex States
+For each of the games we have set $K$ to a different value: with Simple States we have used $K=3$, with Complex States
 $K=2$ and with Montezuma's Revenge $K=4$.
 The first two depend on the number of phases (see \ffref{subsec:SimpleStates} and \ffref{subsec:ComplexStates}) and the last one
 depends on the number of intermediate rewards (see \ffref{subsec:MontezumasRevenge}).
@@ -89,7 +89,7 @@ The only difference is that this one selects the chunk of the parameter vectors 
 depending on the currently active subtree.
 The method which selects one subtree or another is arbitrary, they might be selected with an \ac{AI} method, just
 with a couple of rules or just be a piece of the state. %TODO la ultima parte or just be a piece of the state no tiene sentido leyendo la frase completa
-For this thesis I have used two approaches: part of the state, in Simple States (\ffref{subsec:SimpleStates}) and Complex States
+For this thesis we have used two approaches: part of the state, in Simple States (\ffref{subsec:SimpleStates}) and Complex States
 (\ffref{subsec:ComplexStates}); and some rules about the position of the hero in Montezuma's Revenge (\ffref{subsec:MontezumasRevenge}).
 
 The full algorithm with the few changes explained is shown in \ffref{alg:MA3C}. %TODO yo diria The full modified algorithm
@@ -130,9 +130,9 @@ The full algorithm with the few changes explained is shown in \ffref{alg:MA3C}. 
 
 \section{Environments}
 
-In order to demonstrate the capabilities of \ac{MA3C} over \ac{A3C} I have developed two simple environments where the
+In order to demonstrate the capabilities of \ac{MA3C} over \ac{A3C} we have developed two simple environments where the
 weaknesses of the second one come to light.
-I have also compared the algorithms in a real game, Montezuma's Revenge, which has become famous because of its difficulty.
+We have also compared the algorithms in a real game, Montezuma's Revenge, which has become famous because of its difficulty.
 
 These three environments have been used through a useful toolkit called OpenAi Gym (\cite{gym}), in which the different games
 can be accessed by a common interface facilitating the analysis of different algorithms and games.
@@ -237,7 +237,7 @@ As in Simple States the hero must follow the path in order to obtain the rewards
 The information about the current phase is also available to the player.
 
 The \ac{MDP} problem of this game is exactly the same as in Simple States (\ffref{subsec:SimpleStates}).
-The only thing that changes are the rules of rewards and phases which I have already defined.
+The only thing that changes are the rules of rewards and phases which we have already defined.
 
 The purpose of creating this game is to prove that \ac{A3C} is quite bad going back on his own steps (when the image of the
 game is similar) while for \ac{MA3C} is easy.
@@ -264,11 +264,11 @@ Three yellow bullets have been added in order to represent the checkpoints.}
 \label{fig:MontezumasRevenge}
 \end{figure}
 
-Since this game is really complex and computationally expensive to train, I have made some changes to it.
+Since this game is really complex and computationally expensive to train, we have made some changes to it.
 \begin{itemize}
-    \item In the hole game there are several screens but I will only use the first one in my experiments.
-    \item The hero has multiple lives but I will consider he has just $1$ and, if he dies, the game will be reset.
-    \item When the hero reaches the key I will also reset the game, so the unique goal of the hero is to take that object.
+    \item In the hole game there are several screens but we will only use the first one in my experiments.
+    \item The hero has multiple lives but we will consider he has just $1$ and, if he dies, the game will be reset.
+    \item When the hero reaches the key we will also reset the game, so the unique goal of the hero is to take that object.
 \end{itemize}
 Nevertheless, the procedures remain the same as in the original game.
 
@@ -279,21 +279,21 @@ still), \textsc{Fire} (jump straight up), \textsc{Up}, \textsc{Right},
 
 There are one rope and three stairs with which the hero can go up and down.
 If he jumps into the rope he will grab it, not as with stairs. %TODO No se entiende la ultima frase
-From now on I will refer to the right stairs as \newconcept{Rstairs} and to left ones \newconcept{Lstairs}.
-I will use later the position (in screen space) of the objects, which are the following:
+From now on we will refer to the right stairs as \newconcept{Rstairs} and to left ones \newconcept{Lstairs}.
+We will use later the position (in screen space) of the objects, which are the following:
 \begin{itemize}
     \item rope: from $(109, 174)$ to $(109, 212)$
     \item Rstairs: $(133, 148)$
     \item Lstairs: $(21, 148)$
     \item key: $(14, 209)$
 \end{itemize}
-In order to obtain this positions, and the agent's position, I have used the memory layout described in \citetitle{adriaTFG}
+In order to obtain this positions, and the agent's position, we have used the memory layout described in \citetitle{adriaTFG}
 (\cite{adriaTFG}).
 
 The hero can die within two manners: by falling into the floor from some high position (e.g. from the rope) or by touching the skull in the bottom, which is always moving left and right. %TODO siempre que quieras poner por ejemplo usa e.g. (busca lo que son e.g. y i.e. y usalos siempre)
 
 The hero can obtain a score by collecting the key, which gives him 100 points.
-He can also win 10 points by passing through each of the checkpoints which I have manually added to guide the agent
+He can also win 10 points by passing through each of the checkpoints which we have manually added to guide the agent
 towards the key.
 Since they have been selected in order to guide the agent towards $\pi^*$ this is a way of applying reward shaping
 (\ffref{subsec:RewardShaping}) to Montezuma's Revenge.
@@ -306,9 +306,8 @@ The potential function $\phi(s)$ is defined in the following way:
 \end{equation}
 
 The difficulty is due to the facility to die and the remoteness of the rewards.
-% TODO HABLAR SOBRE EL GYM o lo que use EN EL INICIO DE LA SECCION DE ENVIRONMENTS
 
-I have modeled this game as a \ac{SMDP} (\ffref{subsec:SMDP}),
+We have modeled this game as a \ac{SMDP} (\ffref{subsec:SMDP}),
 with the tuple $\left< \mathcal{S}, \mathcal{O}_s, P_o(s,s'), R_o(s),\gamma \right>$.
 
 The state $s \in \mathcal{S}$ is a pair $s_t = (\mathbf{F}, p)$ where $p \in \{0,1,2,3\}$ is the phase/option of the game and
@@ -374,7 +373,7 @@ that is, the score given by the key and by the checkpoint.
 
 The discount factor $\gamma$ is $0.99$.
 
-I have decided to model this problem as a \ac{SMDP} in order to expose the strengths of \ac{MA3C} inside hierarchical
+We have decided to model this problem as a \ac{SMDP} in order to expose the strengths of \ac{MA3C} inside hierarchical
 learning models, in the knowledge that modeling it as a \ac{MDP} may have been easier and makes more sense.
 
 
