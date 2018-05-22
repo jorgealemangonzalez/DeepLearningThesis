@@ -56,7 +56,12 @@ also be infinite. If this happens the MDP is named \newconconcept{infinite MDP}.
 
 \subsection{Returns\label{subsec:returns}}
 
-We have defined the goal of the agent, that is to maximize the total reward obtained in an episode. We also said that the agent must learn to reach that goal, but we have not defined yet how the agent should select the actions to achieve it. The expected return $R$ must be defined in a way that encourages the agent to learn, so $R$ is some specific function of the reward sequence. The simplest way of computing it is just adding all the future rewards.
+We have defined the goal of the agent, that is to maximize the total reward obtained in an episode.
+We also said that the agent must learn to reach that goal, but we have not defined yet how the agent
+should select the actions to achieve it.
+The expected return $R$ must be defined in a way that encourages the agent to learn, so $R$ is some specific function of
+the reward sequence (\cite[Section~7.1]{sutton1998introduction}).
+The simplest way of computing it is just adding all the future rewards.
 \begin{equation}
     R_t=r_{t+1}+r_{t+2}+r_{t+3}+...+r_T
 \end{equation}
@@ -72,7 +77,12 @@ then this new formulation converges, not like the previous one. The discount fac
 related to how farther rewards should be taken into account or not. If we use a value near 0 then the algorithm
 is capable to rewards that are few time steps away.
 
-%TODO n-step return sutton and barto (section 7.1)
+Given that the value function (\ffref{subsec:value_func}) is an approximation of the future returns, we can use it to
+define the total return value without the entire series of rewards.
+This concept is called the \newconcept{n-step return} at time $t$, and its general formulation is:
+\begin{equation\label{eq:n-step_return}}
+    R_t^{(n)} = r_{t+1} + \gamma r_{t+2} + \gamma^2 r_{t+3} + \dots + \gamma^{n-1} r_{t+n} + \gamma^n V_t(s_{t+n})
+\end{equation}
 
 \subsection{Reward shaping\label{subsec:RewardShaping}}
 
@@ -100,7 +110,7 @@ In most cases the policy is a probability distribution over the actions that can
 \end{equation}
 The action selected to apply to the environment is randomly selected with this probability distribution. When $\pi(s,a)=1$, for some $a$, the policy is \newconcept{deterministic} in state $s$, because action $a$ will always be chosen in that state.
 
-\subsection{Value functions}
+\subsection{Value functions\label{subsec:value_func}}
 
 As described by \citeauthor*[Section~3.7]{sutton1998introduction}, the \newconcept{value function} is an estimate of how good it is for the agent to be in a given state. It uses the expected return to create value functions that depends on future rewards which the agent will obtain. This value will be used by the agent to choose the action. More formally, the value is the expected return for an agent that follows policy $\pi$ from state $s$.
 \begin{equation}
@@ -159,7 +169,7 @@ determines how good is a state in terms of future rewards and the states is dete
 \label{fig:AC}
 \end{figure}
 
-In Figure \ref{fig:AC} you can see how the error is computed based on the approximation of the value function
+In Figure \ref{fig:AC} it can be seen how the error is computed based on the approximation of the value function
 changing how actor and critic behave.
 The hole learning process depend on the error and is defined as the difference between the future returns and
 the approximation of this value made by the algorithm.
@@ -318,7 +328,7 @@ in just one node.
 \subsection{Transfer learning in \aclp{ANN} \label{subsec:TransferLearning}}
 The aim of \newconcept{transfer learning} techniques is to improve the learning process of a new task, given some previous knowledge
 about related tasks.
-Neural networks, especially the deepest ones, need tons of data to adjust their weights to successfully perform some tasks.
+\aclp{ANN}, especially the deepest ones, need tons of data to adjust their weights to successfully perform some tasks.
 
 A way to reduce the amount of training data needed and speed up the learning process is to reuse some \ac{ANN} previously
 trained for a similar task.
@@ -335,7 +345,7 @@ A simpler example is to train the full network first to recognize shapes and the
 
 \section{\acl{DL}}
 \acf{DL} is a machine learning method based on high-level representations of the data.
-It basically extends \acp{ANN} by adding multiple hidden layers creating huge neural networks with lots of parameters and interrelations.
+It basically extends \acp{ANN} by adding multiple hidden layers creating huge networks with lots of parameters and interrelations.
 
 In the last years this technique has become really popular as a consequence of its great results comparing to human level performance in many tasks.
 
@@ -356,7 +366,7 @@ layer, this helps to preserve as much information about the previous layer value
 Finally, the values define the weights for each input signal in each neuron.
 These are the same values for each convolutional layer node.
 This concept is named \newconcept{shared weights} and minimizes the amount
-of variables the neural network has to retain and update.
+of variables the \ac{ANN} has to retain and update.
 
 \ac{ReLU} layers increases the nonlinear properties of the model by applying the function $f(x)=max(0,x)$ to all outputs of the previous layer.
 It is common practice to apply this layer after convolutional layers.
@@ -383,7 +393,7 @@ and the correlations between the action-values and target values.
 For that reason, apart from the \ac{ANN}, they used an experience replay ($E$).
 This structure saves last $T$ states which the environment has gone by in the format $e_t=(s_t, a_t, r_t, s_{t+1})$.
 Then it picks in an uniformly random manner from this set to train the network.
-Training on independent and identically distributed samples helps reducing the instability generated by the neural network.
+Training on independent and identically distributed samples helps reducing the instability generated by the \ac{ANN}.
 
 Q-learning updates are organized in iterations, containing several training steps.
 Each iteration has its fixed network
@@ -393,12 +403,12 @@ They defined the loss function in the following way:
 \begin{equation}
     L_i(\theta_i)=E_{(s,a,r,s') \sim U(D))} \left [ \bigg(r+\gamma \max_{a'}Q(s',a';\theta_i^-)-Q(s,a;\theta_i)\bigg )^2\right ]
 \end{equation}
-Where $\theta_i$ and $\theta^-_i$ are the wights of two neural networks with the same architecture.
+Where $\theta_i$ and $\theta^-_i$ are the wights of two \acp{ANN} with the same architecture.
 $\theta_i$ is updated each training step while $\theta^-_i$ only change when the iteration finish, following
 $\theta_i = \theta^-_i$ after this happens.
 
 This network has successfully surpass human-level skills in many Atari games.
-But in Montezuma's Revenge it was unable to obtain any score (see \ffref{subsec:MontezumasRevenge}).
+But in \acl{MR} it was unable to obtain any score (see \ffref{subsec:MontezumasRevenge}).
 
 \subsection{\acl{A3C}\label{subsec:A3C}}
 The algorithm \acl{A3C}, from now on \ac{A3C}, was introduced by \citeauthor{mnih2016A3C} in
@@ -416,8 +426,7 @@ $V$ is the output of just one node, but $\pi$ is the output of a set of nodes, e
 an action.
 In practice this two \acp{ANN} share almost all the layers, except the last one ($V$ and $\pi$).
 
-%TODO A LO MEJOR HAY QUE DEFINIR N-STEP RETURNS EN ESE APARTADO
-Also the loss function used to train the network differ from \ac{DQN}, it uses n-step returns (\ffref{subsec:returns}) and it does not
+Also the loss function used to train the network differ from \ac{DQN}, it uses n-step returns (\ffref{eq:n-step_return}) and it does not
 update $Q$ values, it updates $V$ and $\pi$.
 The number of steps used in the loss function is $t_{max}$ ( an hyperparameter ) but if a
 final state is reached before that, the loss is computed with less than $t_{max}$.
