@@ -15,8 +15,7 @@ of \ac{A3C} and \ac{DQN} are also using (\cite{deepmind_tensorflow}).
 
 As we have explained before (\ffref{subsec:A3C}), this algorithm uses the image of the environment to represent the state.
 We have used almost the same preprocessing and network architecture (\ffref{fig:A3C}) than in \citetitle{mnih2016A3C} (\cite{mnih2016A3C}).
-In practice, the images of any game are resized to $84 \times 84$ greyscale pixels in order to reduce the computational cost of training,
-specifically the input dimensionality, and also to fit the convolutions.
+In practice, the images of any game are resized to $84 \times 84$ greyscale pixels in order to reduce the computational cost of training and to fit the convolutions.
 The algorithm applies this preprocessing to 4 stacked frames allowing the \ac{ANN} to implicitly calculate the movement
 of the different pixels/objects on the screen.
 There is a frame skip of 4, which means that, only one out of four consecutive frames is taken into account and stacked.
@@ -118,7 +117,7 @@ The full modified algorithm is shown in \ffref{alg:MA3C}.
         \For{ $i \in \{ t-1,\dots,t_{start}\}$}
             \State $R \leftarrow r_i + \gamma R$
             \State Select $k$ \;\newconcept{// Select subtree with any criteria}
-            \State Accumulate gradients wrt $\theta'^k: d\theta \leftarrow d\theta + \nabla_{\theta'} log\:\pi(a_i\mid s_i;\theta')(R-V(s_i;\theta_v'))+\beta\nabla_{\theta'}H(\pi(s_i;\theta'))$
+            \State Accumulate gradients wrt $\theta'^k: d\theta \leftarrow d\theta + \nabla_{\theta'} log\:\pi(a_i\mid s_i;\theta')(R-V(s_i;\theta_v'))+\eta\nabla_{\theta'}H(\pi(s_i;\theta'))$
             \State Accumulate gradients wrt $\theta_v'^k: d\theta_v \leftarrow d\theta_v + \partial(R-V(s_i;\theta_v'))^2 / \partial \theta_{v}'$
         \EndFor
         \State Perform asynchronous update of $\theta$ using $d\theta$ and of $\theta_v$ using $d\theta_v$.
@@ -277,7 +276,7 @@ still), \textsc{Fire} (jump straight up), \textsc{Up}, \textsc{Right},
 \textsc{RightFire}.
 
 There are one rope and three stairs with which the hero can go up and down.
-If he jumps into the rope he will grab it, not as with stairs. %TODO No se entiende la ultima frase
+If he jumps into the rope he will grab the cord, but ,if he jumps into the stairs, this will not happen.
 From now on we will refer to the right stairs as \newconcept{Rstairs} and to left ones \newconcept{Lstairs}.
 We will use later the position (in screen space) of the objects, which are the following:
 \begin{itemize}
@@ -289,7 +288,7 @@ We will use later the position (in screen space) of the objects, which are the f
 In order to obtain this positions, and the agent's position, we have used the memory layout described in \citetitle{adriaTFG}
 (\cite{adriaTFG}).
 
-The hero can die within two manners: by falling into the floor from some high position (e.g. from the rope) or by touching the skull in the bottom, which is always moving left and right. %TODO siempre que quieras poner por ejemplo usa e.g. (busca lo que son e.g. y i.e. y usalos siempre)
+The hero can die within two manners: by falling into the floor from some high position (e.g. from the rope) or by touching the skull in the bottom, which is always moving left and right.
 
 The hero can obtain a score by collecting the key, which gives him 100 points.
 He can also win 10 points by passing through each of the checkpoints which we have manually added to guide the agent
@@ -364,11 +363,10 @@ By defining the options in this way, we divide the problem in 4 phases from whic
 it changes to the next, it is impossible to go back to another previous option/phase.
 This simplifies the game, being really similar to Simple States and Complex States games.
 
-%TODO EL K DE AQUI ES DISTINTO AL DE MA3C
 As far as the agent will learn how to act inside the option, we cannot accurately define $ P_o(s,s') $ and $ R_o(s) $.
 This is because the number of steps $k$ depends on the policy of the option.
 But we can say that options $o_0, o_1$ and $o_2$ have a reward $r_{t+k} = 10$ while $o_3$ has a reward $r_{t+k} = 110$,
-that is, the score given by the key and by the checkpoint.
+i.e., the score given by the key and by the checkpoint.
 
 The discount factor $\gamma$ is $0.99$.
 

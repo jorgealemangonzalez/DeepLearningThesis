@@ -185,7 +185,6 @@ The value function will also approximate more precisely future return values.
 
 A \ac{SMDP} is a framework for \newconcept{hierarchical reinforcement learning} in which actions are not atomic, in the sense that they
 do not last for just one time step, can be composed by several smaller actions and make decisions based on several states.
-%TODO CAMBIAR BETA AQUI O EN EL PARAMETRO DEL A3C SINO PUEDE SER CONFUSO
 
 This complex actions are named options and can be expressed as a tuple $\langle \mathcal{I}, \pi, \beta \rangle$ where
 $\mathcal{I}$ is the set of initial states
@@ -201,7 +200,7 @@ More formally, a Markov option is made up by:
 Since an option can be composed by several actions or other options, and each action lasts one time step, an
 option may last more time steps.
 
-%TODO QUITAR ESTO SI NO LO USO
+%TODO F QUITAR ESTO SI NO LO USO
 With Markov options the interrupt decision is made on the current state $s_t$ but sometimes we may want to end an option if
 some specific amount of time has elapsed.
 For this purpose semi-Markov options were created, they use the history of
@@ -282,7 +281,7 @@ $b_k$ is the bias;
 $\varphi(\cdot)$ is the activation function;
 and $y_k$ is the output signal of the neuron.
 
-\subsection{Multilayer perceptron}
+\subsection{Multilayer perceptron\label{subsec:multilayer-perceptron}}
 A \newconcept{multilayer perceptron} is a kind of ANN made up by several ordered \newconcept{layers} of neurons.
 It is characterized by having an input layer, several hidden layers and an output layer.
 
@@ -312,8 +311,10 @@ It approximates the difference between the output signal and the desired output 
 to approximate some function.
 Each node computes its contribution to the error by estimating the gradient with respect its weights and bias.
 
-The process of adjusting the weights and biases of each neuron to approximate a required output signal given some input
-signal is named \newconcept{training}.
+The process of adjusting the weights and biases of each neuron to approximate a required output signal, given some input
+signal, is named \newconcept{training}.
+I order to accomplish this purpose different gradient descent algorithms might be used, such as RMSprop (\cite{rmsprop}).
+The speed with which the parameters change is controlled by a fixed hyperparameter called the \newconcept{learning rate}.
 
 Fully connected layers are the most computationally expensive to train because of the amount of connexions and variables.
 One way of reducing complexity is to use \newconcept{shared weights}, instead of having different weights for each input of each neuron,
@@ -434,11 +435,12 @@ It also adds an entropy factor $H$ based on the policy, in order to improve expl
 convergence to suboptimal deterministic policies.
 \ac{A3C} uses the following update function:
 \begin{equation}
-    \nabla_{\theta'}\;log\:\pi(a_t\mid s_t;\theta')\;A(s_t,a_t;\theta,\theta_v)+\beta\nabla_{\theta'}H(\pi(s_t;\theta'))
+    \rho\nabla_{\theta'}\;log\:\pi(a_t\mid s_t;\theta')\;A(s_t,a_t;\theta,\theta_v)+\eta\nabla_{\theta'}H(\pi(s_t;\theta'))
 \end{equation}
 Where $A$ is the advantage function of n-step returns in terms of $V$.
 $\theta'$ are the weights related to the policy and $\theta_v$ the weights related to the value function.
-$\beta$ is an hyperparameter that controls the strength of the entropy regularization term.
+$\eta$ is an hyperparameter that controls the strength of the entropy regularization term and $\rho$ another one which
+controls the strength of the advantage function.
 The advantage function defines at follows:
 \begin{equation}
     A_t=\sum^{k-1}_{i=0}\gamma^i r_{t+i}+\gamma^k V(s_{t+k};\theta_v)-V(s_t;\theta_v)
@@ -472,8 +474,8 @@ The algorithm used in each thread is the following.
             \end{cases}
         \For{ $i \in \{ t-1,\dots,t_{start}\}$}
             \State $R \leftarrow r_i + \gamma R$
-            \State Accumulate gradients wrt $\theta': d\theta \leftarrow d\theta + \nabla_{\theta'} log\:\pi(a_i\mid s_i;\theta')(R-V(s_i;\theta_v'))+\beta\nabla_{\theta'}H(\pi(s_i;\theta'))$
-            \State Accumulate gradients wrt $\theta_v': d\theta_v \leftarrow d\theta_v + \partial(R-V(s_i;\theta_v'))^2 / \partial \theta_{v}'$
+            \State Accumulate gradients wrt $\theta': d\theta \leftarrow d\theta + \rho\nabla_{\theta'} log\:\pi(a_i\mid s_i;\theta')(R-V(s_i;\theta_v')+\eta\nabla_{\theta'}H(\pi(s_i;\theta'))$
+            \State Accumulate gradients wrt $\theta_v': d\theta_v \leftarrow d\theta_v + \rho(\partial(R-V(s_i;\theta_v')^2 / \partial \theta_{v}')$
         \EndFor
         \State Perform asynchronous update of $\theta$ using $d\theta$ and of $\theta_v$ using $d\theta_v$.
     \Until{$T > T_{max}$}

@@ -8,20 +8,26 @@ The \ac{A3C} algorithm was fully provided by him while the algorithm \ac{MA3C} a
 States have been developed by me.
 The seed to initialize the weights of the different networks where randomly chosen in each of the experiments and runs.
 
+We have used multiple common hyperparameters along the three experiments, which are:
+\begin{itemize}
+    \item The discount factor $\gamma = 0.99$ (\ffref{subsec:returns}).
+    \item $t_{max}=20$ (\ffref{subsec:A3C}).
+    \item Entropy regularization term $\eta = 0.1$ (\ffref{subsec:A3C}).
+    \item Value regularization term $ \rho = 0.5$ (\ffref{subsec:A3C}).
+    \item The learning rate is $0.007$ (\ffref{subsec:multilayer-perceptron}).
+\end{itemize}
+
 \section{Simple States}
 
 We have compared the performance of both algorithms \ac{A3C} (\ffref{alg:A3C}) and \ac{MA3C} (\ffref{alg:MA3C}) in Simple
 States game (\ffref{subsec:SimpleStates}).
 
-The hyperparameters used for both algorithms are:
-\begin{itemize} % TODO R PROGUNTAR A MIQUEL QUE FALTA Y SI PONER EL VALUE REGULARIZATION
-    \item The discount factor $\gamma = 0.99$.
-    \item Batch size $20$. %TODO R EXPLAIN
-    \item The number of threads in which the algorithms have been parallelized is $8$.
-    \item Subtrees $K = 3$. (just for \ac{MA3C})
-    \item Entropy regularization term $\beta = 0.1$.
-    \item Value regularization term $ = 0.5$. %TODO R PONER EN EL ALGORITMO
+The specific hyperparameters used in this experiment which differ from the general ones are:
+\begin{itemize}
+    \item The number of threads in which the algorithms have been parallelized is $8$ (\ffref{subsec:A3C}).
+    \item Subtrees $K = 3$ (just for \ac{MA3C}, \ffref{subsec:MA3C}).
 \end{itemize}
+
 
 This parameters have been chosen in order to show the disadvantages of \ac{A3C} as opposed to \ac{MA3C}.
 There might be a different combination of hyperparameters in which, at the end, both algorithms converge to the same solution.
@@ -66,7 +72,11 @@ behave in environments in which it is mandatory to retrace its steps.
 It is important to mention that in this game there is no hidden checkpoint, so the \ac{MA3C} does not have as much
 ``advantage" as in Simple States.
 
-% TODO R PONER HYPERPARAMETROS DESPUES DE COMPLETAR LOS ANTERIORES
+The specific hyperparameters used in this experiment which differ from the general ones are:
+\begin{itemize}
+    \item The number of threads in which the algorithms have been parallelized is $8$.
+    \item Subtrees $K = 2$. (just for \ac{MA3C})
+\end{itemize}
 
 \begin{figure}[hbtp]
 \begin{center}
@@ -103,14 +113,12 @@ while learning how to reach the new goal.
 \section{Montezuma's Revenge}
 % TODO F PODRÍA HACER UN EXPERIMENTO SIN REWARD SHAPING PERO CAMBIANDO DE SUBTREE A VER QUE SALE
 
-The hyperparameters selected are almost the same than in Simple States and Complex States, the only ones that change are
-the following:
+The specific hyperparameters used in this experiment which differ from the general ones are:
 \begin{itemize}
     \item The number of threads in which the algorithms have been parallelized is $32$ in order to speed up the learning
     process.
     \item Subtrees $K = 4$, one for each option which the algorithm must learn. (just for \ac{MA3C})
 \end{itemize}
-% TODO R PONER HYPERPARAMETROS DESPUES DE COMPLETAR LOS ANTERIORES, RECORDAR K=?
 
 \begin{figure}[hbtp]
 \begin{center}
