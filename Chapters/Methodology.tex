@@ -18,11 +18,11 @@ We have used almost the same preprocessing and network architecture (\ffref{fig:
 In practice, the images of any game are resized to $84 \times 84$ greyscale pixels in order to reduce the computational cost of training and to fit the convolutions.
 The algorithm applies this preprocessing to 4 stacked frames allowing the \ac{ANN} to implicitly calculate the movement
 of the different pixels/objects on the screen.
-There is a frame skip of 4, which means that, only one out of four consecutive frames is taken into account and stacked.
-There is also a component-wise maximum selection over two consecutive frames, the one stacked and the next one which will
+We also use a frame skip of 4, i.e. only one out of four consecutive frames is taken into account and stacked.
+There is also a component-wise maximum selection over two consecutive frames, specifically between the one stacked and the next one which will
 not be stacked.
-The state dimensionality is $84 \times 84 \times 4$ which defines the input layer of the \ac{CNN}.
-This is just for Atari games, in Simple States (\ffref{subsec:SimpleStates}) and Complex States (\ffref{subsec:ComplexStates})
+The state dimensionality for \ac{MR} is $84 \times 84 \times 4$ which defines the input layer of the \ac{CNN}, but in Simple States
+(\ffref{subsec:SimpleStates}) and Complex States (\ffref{subsec:ComplexStates})
 the RGB channels of a single frame are used instead.
 The dimensionality of the input layer in that games is $84 \times 84 \times 3$.
 
@@ -32,7 +32,7 @@ followed by a \ac{ReLU} layer.
 The second layer is also a convolutional layer, but with $32$ filters with kernel dimension $4 \times 4$ and stride 2,
 again followed by a \ac{ReLU} layer.
 The last hidden layer intends to represent general features about the state of the game.
-It is a fully connected composed by 256 ReLU nodes.
+It is a fully connected layer composed by 256 ReLU nodes.
 
 From these 256 features the actor and critic layers, which are the output layers, decide the actions that should be taken
 in order to maximize the reward, as explained in (\ffref{subsec:AC}).
@@ -51,8 +51,8 @@ The critic is just $1$ neuron representing the value function $V(s_t)$.
 
 \subsection{\acl{MA3C}\label{subsec:MA3C}}
 
-This algorithm is strongly associated with hierarchial reinforcement learning, since the last layer of \ac{A3C}
-($\pi$ and $V(s_t)$) is replicated several times in order to model different tasks inside a common bigger problem.
+This algorithm is strongly associated with hierarchial reinforcement learning, since the last layers of \ac{A3C}
+($\pi$ and $V(s_t)$) are replicated several times in order to model different tasks inside a common bigger problem.
 
 \begin{figure}[hbtp]
 \begin{center}
@@ -117,8 +117,8 @@ The full modified algorithm is shown in \ffref{alg:MA3C}.
         \For{ $i \in \{ t-1,\dots,t_{start}\}$}
             \State $R \leftarrow r_i + \gamma R$
             \State Select $k$ \;\newconcept{// Select subtree with any criteria}
-            \State Accumulate gradients wrt $\theta'^k: d\theta \leftarrow d\theta + \nabla_{\theta'} log\:\pi(a_i\mid s_i;\theta')(R-V(s_i;\theta_v'))+\eta\nabla_{\theta'}H(\pi(s_i;\theta'))$
-            \State Accumulate gradients wrt $\theta_v'^k: d\theta_v \leftarrow d\theta_v + \partial(R-V(s_i;\theta_v'))^2 / \partial \theta_{v}'$
+            \State Accumulate gradients wrt $\theta'^k: d\theta^k \leftarrow d\theta^k + \rho\nabla_{\theta'^k} log\:\pi(a_i\mid s_i;\theta'^k)(R-V(s_i;\theta_v'^k))+\eta\nabla_{\theta'^k}H(\pi(s_i;\theta'^k))$
+            \State Accumulate gradients wrt $\theta_v'^k: d\theta_v^k \leftarrow d\theta_v^k + \rho(\partial(R-V(s_i;\theta_v'^k)^{2}) / \partial \theta_{v}'^k)$
         \EndFor
         \State Perform asynchronous update of $\theta$ using $d\theta$ and of $\theta_v$ using $d\theta_v$.
     \Until{$T > T_{max}$}
@@ -169,8 +169,8 @@ The goal of the hero is to reach the door by passing through the different check
 with any wall, this will give to the hero the maximum score, 2 points.
 The game is organized in three different phases/states, each one having a different objective.
 The first one's objective is to reach the checkpoint,
-of the second one's, the hidden checkpoint and the third one's, the door.
-The information about the current phase is allways available to the player.
+of the second one's objective is the hidden checkpoint and the third one's, the door.
+The information about the current phase is always available to the player.
 
 In order to solve this game with both \ac{A3C} and \ac{MA3C} algorithms we must model it as a \ac{SMDP} problem,
 describing components of the tuple $\langle\mathcal{S}, \mathcal{A}_s, \mathcal{P}_a(s,s'), \mathcal{R}_a(s,s'), \gamma \rangle$.
@@ -264,7 +264,7 @@ Three yellow bullets have been added in order to represent the checkpoints.}
 
 Since this game is really complex and computationally expensive to train, we have made some changes to it.
 \begin{itemize}
-    \item In the hole game there are several screens but we will only use the first one in my experiments.
+    \item In the hole game there are several screens but we will only use the first one in our experiments.
     \item The hero has multiple lives but we will consider he has just $1$ and, if he dies, the game will be reset.
     \item When the hero reaches the key we will also reset the game, so the unique goal of the hero is to take that object.
 \end{itemize}
@@ -359,6 +359,7 @@ The consecutive options, in order of appearance, are the following:
 The action set available inside each option is
 $\mathcal{A}_s = \{\textsc{Noop}, \textsc{Fire}, \textsc{Up}, \textsc{Right}, \textsc{Left},$
 $\textsc{Down}, \textsc{LeftFire}, \textsc{RightFire}\}$.
+
 By defining the options in this way, we divide the problem in 4 phases from which, once
 it changes to the next, it is impossible to go back to another previous option/phase.
 This simplifies the game, being really similar to Simple States and Complex States games.

@@ -1,9 +1,22 @@
 \chapter{Background}
 
 \section{\aclp{RL}}
-Reinforcement learning is an area of \acf{ML} that models a problem focusing on maximizing a numerical reward. To achieve this, the agent obtains a representation of the situation of the problem, named \newconcept{state}; then selects an \newconcept{action}; interacts with the environment, by applying that action; and finally it may obtain some \newconcept{reward}. After all this process the situation of the problem changes and the agent finds itself a new state. Repeating this steps several times, the agent should explore the different states of the problem and learn how to map situations to actions with the purpose of maximizing the reward.
+\acl{RL} is an area of \acf{ML} that models a problem focusing on maximizing a numerical reward by interacting, in a
+sequential manner, with the environment.
+To achieve this, the agent obtains a representation of the situation of the problem, named \newconcept{state}; then
+selects an \newconcept{action}; interacts with the environment, by applying that action;
+and finally it finds itself a new state while obtaining some \newconcept{reward}.
+Repeating this steps several times, the agent should explore the different states of the problem and learn how to map
+situations to actions with the purpose of maximizing the reward.
 
-The learning process is usually organized in \newconcept{episodes}. Each episode is composed by an initial state $s_0$, the first one that the environment generates; intermediate states $s_t$ ; and may have several final states, which establish the end of an episode. The agent's goal is to maximize the total amount of reward it receives in a complete episode. When an episode ends the the environment resets and starts again from $s_0$ or some other initial state that belongs to the set of initial states. In some cases the agent interacts infinitely without reaching any terminal state, we call this \newconcept{continual tasks}.
+The learning process is usually organized in \newconcept{episodes}.
+Each episode is composed by an initial state $s_0$, the first one that the environment generates;
+intermediate states $s_t$ ; and a final state $s_T$, which establish the end of an episode.
+The final state belongs to the set of final states of the environment, which is composed by one or more states.
+The agent's goal is to maximize the total amount of reward it receives in a complete episode.
+When an episode ends the the environment resets and starts again from $s_0$ or some other initial state that belongs to
+the set of initial states.
+In some cases the agent interacts infinitely without reaching any terminal state, we call this \newconcept{continual tasks}.
 
 One of the challenging aspects of reinforcement learning is the tradeoff between \newconcept{exploration} and \newconcept{exploitation}. In the kind of environments this thesis is focused on, the actions applied affect not only immediate rewards but also future ones. This implies that taking actions with high immediate reward is not always the best choice, there might be some series of actions with which it obtains higher rewards in the future. In reinforcement learning, the agent should exploit immediate rewards in order to obtain feedback of how is it performing. Nevertheless, it may also explore different actions that do not have as high immediate reward in order to find higher future rewards.
 
@@ -66,7 +79,7 @@ The simplest way of computing it is just adding all the future rewards.
     R_t=r_{t+1}+r_{t+2}+r_{t+3}+...+r_T
 \end{equation}
 Where $r_T$ is the reward obtained in some terminal state. In continual tasks the
-time step $T = \infty$ so the return, which is what we are trying to maximize, will also be infinite. To avoid this problem we must introduce
+time step $T = \infty$ implying that the return, which is what we are trying to maximize, will also be infinite. To avoid this problem we must introduce
 the \newconcept{discounted return}, which adds in a discount factor $\gamma$. This factor modifies the previous formulation in the following way:
 \begin{equation\label{eq:return}}
     R_t = r_{t+1} + \gamma r_{t+2} + \gamma^2 r_{t+3} + \dots = \sum_{k=0}^\infty\gamma^k r_{t+k+1}
@@ -88,12 +101,17 @@ This concept is called the \newconcept{n-step return} at time $t$, and its gener
 
 Sometimes an agent is not ``smart" enough to reach the environment rewards. In this scenario some new rewards can be added to guide the agent towards the original rewards.
 
-Specifically, applying reward shaping to a \ac{MDP} is to modify its reward function $\mathcal{R}_a(s,s')$ getting a new one $\mathcal{R'}_a(s,s')$, the difference between them is defined by the
+Specifically, applying reward shaping to a \ac{MDP} (\cite{ng1999policy}) is to modify its reward function $\mathcal{R}_a(s,s')$ getting a
+new one $\mathcal{R'}_a(s,s')$, the difference between them is defined by the
 \newconcept{shaping reward function}. More formally
 $\mathcal{R'}_a(s,s') = \mathcal{R}_a(s,s') + \mathcal{F}(s,a,s')$ where
 $\mathcal{F} : \mathcal{S} \times \mathcal{A} \times \mathcal{S} \rightarrow \Re$ is a bounded real-valued function.
 
-The function $\mathcal{F}$ should be chosen using expert knowledge about the domain or in a general manner that works for any MDP. This choice should be made carefully, because modification in the rewards of the MDP should guide the agent to reach the same optimal policy $\pi^*$ (\ffref{subsec:policy}) and not another policy which is suboptimal for the original problem. To guarantee consistency with the optimal policy, $\mathcal{F}$ must be \newconcept{potential-based}. We say $\mathcal{F}$ is potential-based if there exists a real-valued function
+The function $\mathcal{F}$ should be chosen using expert knowledge about the domain or in a general manner that works for any MDP.
+This choice should be made carefully, because the modification of the MDP rewards should guide the agent to reach the
+same optimal policy $\pi^*$ (\ffref{subsec:policy}) and not another policy which is suboptimal for the original problem.
+To guarantee consistency with the optimal policy, $\mathcal{F}$ must be \newconcept{potential-based}.
+We say $\mathcal{F}$ is potential-based if there exists a real-valued function
 $\phi : \mathcal{S} \rightarrow \Re$ such that for all $s \in \mathcal{S} \setminus \{s_0\}, a \in \mathcal{A}, s’ \in \mathcal{S}$
 \begin{equation}
     \mathcal{F}(s, a, s') = \gamma \phi(s') - \phi(s)
@@ -106,7 +124,7 @@ As described by \citeauthor*[Section~1.3]{sutton1998introduction}, a policy $\pi
 
 In most cases the policy is a probability distribution over the actions that can be choosed in some state $s$. Is denoted as $\pi(a,s)$ where $s$ belongs to the state space and $a$ to the action space, fulfilling the following condition:
 \begin{equation}
-    \sum_{a \in \mathcal{A}_s} \pi(a,s) = 1
+    \forall s \in \mathcal{S} \sum_{a \in \mathcal{A}_s} \pi(a,s) = 1
 \end{equation}
 The action selected to apply to the environment is randomly selected with this probability distribution. When $\pi(s,a)=1$, for some $a$, the policy is \newconcept{deterministic} in state $s$, because action $a$ will always be chosen in that state.
 
@@ -186,7 +204,8 @@ The value function will also approximate more precisely future return values.
 A \ac{SMDP} is a framework for \newconcept{hierarchical reinforcement learning} in which actions are not atomic, in the sense that they
 do not last for just one time step, can be composed by several smaller actions and make decisions based on several states.
 
-This complex actions are named options and can be expressed as a tuple $\langle \mathcal{I}, \pi, \beta \rangle$ where
+A common formalism for representing complex actions is the options framework.
+An option can be expressed as a tuple $\langle \mathcal{I}, \pi, \beta \rangle$ where
 $\mathcal{I}$ is the set of initial states
 in which the option is available, $\pi$ is the policy that defines which actions must be taken inside the option and $\beta$ is a
 probability distribution over states of the option being interrupted.
@@ -474,8 +493,8 @@ The algorithm used in each thread is the following.
             \end{cases}
         \For{ $i \in \{ t-1,\dots,t_{start}\}$}
             \State $R \leftarrow r_i + \gamma R$
-            \State Accumulate gradients wrt $\theta': d\theta \leftarrow d\theta + \rho\nabla_{\theta'} log\:\pi(a_i\mid s_i;\theta')(R-V(s_i;\theta_v')+\eta\nabla_{\theta'}H(\pi(s_i;\theta'))$
-            \State Accumulate gradients wrt $\theta_v': d\theta_v \leftarrow d\theta_v + \rho(\partial(R-V(s_i;\theta_v')^2 / \partial \theta_{v}')$
+            \State Accumulate gradients wrt $\theta': d\theta \leftarrow d\theta + \rho\nabla_{\theta'} log\:\pi(a_i\mid s_i;\theta')(R-V(s_i;\theta_v'))+\eta\nabla_{\theta'}H(\pi(s_i;\theta'))$
+            \State Accumulate gradients wrt $\theta_v': d\theta_v \leftarrow d\theta_v + \rho(\partial(R-V(s_i;\theta_v')^{2}) / \partial \theta_{v}')$
         \EndFor
         \State Perform asynchronous update of $\theta$ using $d\theta$ and of $\theta_v$ using $d\theta_v$.
     \Until{$T > T_{max}$}

@@ -5,7 +5,7 @@ algorithms that solve this kind of problems work: Q-learning and \acl{A3C}.
 Later, we did a brief introduction to \aclp{ANN}, emphasizing on the architecture of the network and how to improve
 the learning process through transfer learning techniques.
 We also resumed the state of the art of deep reinforcement learning algorithms to finally propose a variation of those
-which take advantage of transfer learning methods, we called it \acl{MA3C}.
+which take advantage of transfer learning methods.
 
 We developed two simple games and modified one of the most famous Atari games (\acl{MR}) to help us understanding the
 strengths of our new algorithm.
@@ -29,7 +29,7 @@ A way of doing it is to have just two subtrees and using one to enhance explorat
 There will be a \ac{MA3C} network whose first subtree trains in a problem until convergence and then the second subtree
 starts training with all the previous knowledge.
 Then if this new subtree finds another better policy we could use the outputs of this policy to train the first network
-in a supervised manner, giving input-output pairs to the first subtree.
+in a supervised manner, i.e. by giving input-output pairs to the first subtree.
 
 One of the main weaknesses of \ac{A3C} is the exploration, and we tried to improve it with \ac{MA3C}, which enhances the
 exploration implicitly by promoting randomness.
