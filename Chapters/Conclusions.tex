@@ -18,18 +18,18 @@ how to split them.
 
 \section{Future work}
 
-We have managed subtree changes of \ac{MA3C} in a simple manner, but there are more intelligent ways of doing it.
-We could have any kind of \ac{AI} algorithm to select the subtree which is activated, it would be interesting to analyse
+We have managed subgraph changes of \ac{MA3C} in a simple manner, but there are more intelligent ways of doing it.
+We could have any kind of \ac{AI} algorithm to select the subgraph which is activated, it would be interesting to analyse
 the combination of different algorithms with \ac{MA3C}.
-For example, MLSH (\cite{frans2017meta}) is a very similar algorithm which automatically selects the active subtree.
+For example, MLSH (\cite{frans2017meta}) is a very similar algorithm which automatically selects the active subgraph.
 
 We made transfer learning through an unsupervised learning approach, but an attractive research would be to transfer the
 knowledge in a supervised manner.
-A way of doing it is to have just two subtrees and using one to enhance exploration when the first one converges.
-There will be a \ac{MA3C} network whose first subtree trains in a problem until convergence and then the second subtree
+A way of doing it is to have just two subgraphs and using one to enhance exploration when the first one converges.
+There will be a \ac{MA3C} network whose first subgraph trains in a problem until convergence and then the second subgraph
 starts training with all the previous knowledge.
-Then if this new subtree finds another better policy we could use the outputs of this policy to train the first network
-in a supervised manner, i.e. by giving input-output pairs to the first subtree.
+Then if this new subgraph finds another better policy we could use the outputs of this policy to train the first network
+in a supervised manner, i.e. by giving input-output pairs to the first subgraph.
 
 One of the main weaknesses of \ac{A3C} is the exploration, and we tried to improve it with \ac{MA3C}, which enhances the
 exploration implicitly by promoting randomness.

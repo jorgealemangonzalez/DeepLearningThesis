@@ -19,8 +19,8 @@ In practice, the images of any game are resized to $84 \times 84$ greyscale pixe
 The algorithm applies this preprocessing to 4 stacked frames allowing the \ac{ANN} to implicitly calculate the movement
 of the different pixels/objects on the screen.
 We also use a frame skip of 4, i.e. only one out of four consecutive frames is taken into account and stacked.
-There is also a component-wise maximum selection over two consecutive frames, specifically between the one stacked and the next one which will
-not be stacked.
+To generate the skipped frames \ac{A3C} repeats 3 times the last selected action, emulating the human behaviour, who is
+unable to take actions as fast as the game is rendering (60 frames per second).
 The state dimensionality for \ac{MR} is $84 \times 84 \times 4$ which defines the input layer of the \ac{CNN}, but in Simple States
 (\ffref{subsec:SimpleStates}) and Complex States (\ffref{subsec:ComplexStates})
 the RGB channels of a single frame are used instead.
@@ -70,23 +70,23 @@ The output layer is made up by $K$ copies of the \ac{A3C} output layer, where $K
 different depending on the use case.
 For each of the games we have set $K$ to a different value: with Simple States we have used $K=3$, with Complex States
 $K=2$ and with \ac{MR} $K=4$.
-The first two depend on the number of phases (see \ffref{subsec:SimpleStates} and \ffref{subsec:ComplexStates}) and the last one
-depends on the number of intermediate rewards (see \ffref{subsec:MontezumasRevenge}).
+This value depend on the number of phases (see \ffref{subsec:SimpleStates} , \ffref{subsec:ComplexStates} and \ffref{subsec:MontezumasRevenge}).
+The input layer is also different depending on the game, in the same manner than \ac{A3C}.
 
-The architecture of \ac{MA3C} contains multiple \newconcept{subtrees} defining different \acl{AC} approaches to the given input state,
+The architecture of \ac{MA3C} contains multiple \newconcept{subgraphs} defining different \acl{AC} approaches to the given input state,
 each one connected to the high level features (last layer) but not between them.
 With this architecture the algorithm uses transfer learning (\ffref{subsec:TransferLearning}) to extract common features
 about the environment, which are useful for all \ac{AC} layers.
 When some task is already trained and a new one starts to train, most of the network is reused, speeding up the learning
 process.
-Given that every subtree is used to solve a different task inside a bigger problem, the common parameters will be optimized to
-extract as much information as possible about the general problem, while the weights of each subtree will be optimized to
+Given that every subgraph is used to solve a different task inside a bigger problem, the common parameters will be optimized to
+extract as much information as possible about the general problem, while the weights of each subgraph will be optimized to
 succeed in the specific task.
 
 The update function, advantage function and algorithm of \ac{MA3C} remain the same ones as in \ac{A3C} (\ffref{subsec:A3C}).
 The only difference is that this one selects the chunk of the parameter vectors $\theta'$ and $\theta_{v}'$ that will be updated
-depending on the currently active subtree.
-The method which selects one subtree or another is arbitrary, they might be selected with an \ac{AI} method, just
+depending on the currently active subgraph.
+The method which selects one subgraph or another is arbitrary, they might be selected with an \ac{AI} method, just
 with a couple of rules or be given by the state.
 For this thesis we have used two approaches: part of the state, in Simple States (\ffref{subsec:SimpleStates}) and Complex States
 (\ffref{subsec:ComplexStates}); and some rules about the position of the hero in Montezuma's Revenge (\ffref{subsec:MontezumasRevenge}).
@@ -116,7 +116,7 @@ The full modified algorithm is shown in \ffref{alg:MA3C}.
             \end{cases}
         \For{ $i \in \{ t-1,\dots,t_{start}\}$}
             \State $R \leftarrow r_i + \gamma R$
-            \State Select $k$ \;\newconcept{// Select subtree with any criteria}
+            \State Select $k$ \;\newconcept{// Select subgraph with any criteria}
             \State Accumulate gradients wrt $\theta'^k: d\theta^k \leftarrow d\theta^k + \rho\nabla_{\theta'^k} log\:\pi(a_i\mid s_i;\theta'^k)(R-V(s_i;\theta_v'^k))+\eta\nabla_{\theta'^k}H(\pi(s_i;\theta'^k))$
             \State Accumulate gradients wrt $\theta_v'^k: d\theta_v^k \leftarrow d\theta_v^k + \rho(\partial(R-V(s_i;\theta_v'^k)^{2}) / \partial \theta_{v}'^k)$
         \EndFor
@@ -149,8 +149,8 @@ This are the different types:
   \item \newconcept{checkpoint}: When the hero reach this object he obtains a reward of value 1 and enables the hidden
   checkpoint reward.
   Once the hero reaches it for the first time he will never obtain the reward again.
-  \item \newconcept{hidden checkpoint}: When the hero reach this object enables the door.
-  It basically forces the hero to pass and there is no reward when this happens.
+  \item \newconcept{hidden checkpoint}: When the hero reaches this object the door is activated, enabling the reward of the door.
+  It basically forces the hero to pass through, giving no reward to him.
   \item \newconcept{door}: If the hero reach the door having gone through the different checkpoints the game ends and
   he obtains a reward of value 1.
 \end{itemize}
@@ -276,7 +276,7 @@ still), \textsc{Fire} (jump straight up), \textsc{Up}, \textsc{Right},
 \textsc{RightFire}.
 
 There are one rope and three stairs with which the hero can go up and down.
-If he jumps into the rope he will grab the cord, but ,if he jumps into the stairs, this will not happen.
+If he jumps into the rope he will grab the cord, but, if he jumps into the stairs, he will fall into the floor.
 From now on we will refer to the right stairs as \newconcept{Rstairs} and to left ones \newconcept{Lstairs}.
 We will use later the position (in screen space) of the objects, which are the following:
 \begin{itemize}

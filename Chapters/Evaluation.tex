@@ -5,8 +5,8 @@ In this chapter we will supply enough evidence about how the \ac{MA3C} algorithm
 
 All the code needed to make the following analysis was developed inside a project of the Universidad Pompeu Fabra researcher
 Miquel Juyent.
-The \ac{A3C} algorithm was fully provided by him while the algorithm \ac{MA3C} and the games Simple States and Complex
-States have been developed by us.
+We have taken his \ac{A3C} implementation and extended it in order to allow the use of \ac{MA3C} and the games
+Simple States and Complex States.
 The seed to initialize the weights of the different networks where randomly chosen in each of the experiments and runs.
 
 We have used multiple common hyperparameters along the three experiments, which are:
@@ -26,7 +26,7 @@ States game (\ffref{subsec:SimpleStates}).
 The specific hyperparameters used in this experiment which differ from the general ones are:
 \begin{itemize}
     \item The number of threads in which the algorithms have been parallelized is $8$ (\ffref{subsec:A3C}).
-    \item Subtrees $K = 3$ (just for \ac{MA3C}, \ffref{subsec:MA3C}).
+    \item Subgraphs $K = 3$ (just for \ac{MA3C}, \ffref{subsec:MA3C}).
 \end{itemize}
 
 
@@ -49,19 +49,19 @@ The learning process of both algorithms measured by score over steps is shown in
 As can be seen, \ac{MA3C} algorithm obtains score $2$ (checkpoint and door) while \ac{A3C} obtains score $0$ because it
 reaches the checkpoint but then hits a wall.
 
-This is due to the subtree changes which the algorithm makes every time it goes through any of the checkpoints (normal
+This is due to the subgraph changes which the algorithm makes every time it goes through any of the checkpoints (normal
 and hidden).
 Every time the change happens the data in the common network changes in a different manner (the direction of the gradient) %TODO R NO HE HABLADO DEL GRADIENTE , QUITAR?
-until it converges to common features for all subtrees.
+until it converges to common features for all subgraphs.
 Thanks to that, the randomness is implicitly increased every time the change happens until convergence is achieved.
 And, as far as more random actions lead to better exploration, this algorithm is using the subgoals (checkpoints) in
 order to enhance exploration only when needed, specifically when a new phase is achieved.
 
 It is important to remember that the hidden checkpoint does not give any reward, so in some cases there will be no need
-of adding intermediate rewards, just subtree changes.
+of adding intermediate rewards, just subgraph changes.
 In general, when solving a problem with \ac{MA3C} it might be no need of doing reward shaping (\ffref{subsec:RewardShaping})
 and carefully select the $\mathcal{F}$ function to ensure near-optimal policies.
-The subtree changes can be done in any state and the optimal policies will remain the same, it will just enhance exploration
+The subgraph changes can be done in any state and the optimal policies will remain the same, it will just enhance exploration
 after reaching that states.
 
 \section{Complex States}
@@ -76,7 +76,7 @@ It is important to mention that in this game there is no hidden checkpoint, so t
 The specific hyperparameters used in this experiment which differ from the general ones are:
 \begin{itemize}
     \item The number of threads in which the algorithms have been parallelized is $8$.
-    \item Subtrees $K = 2$. (just for \ac{MA3C})
+    \item Subgraphs $K = 2$. (just for \ac{MA3C})
 \end{itemize}
 
 \begin{figure}[hbtp]
@@ -106,19 +106,19 @@ In both cases the hero will be next to the first checkpoint, so the algorithm mu
 of the door, means a change on the goal.
 
 Using \ac{MA3C} in this kind of problems allows us to change the goal of the agent very easily, just by selecting another
-subtree.
+subgraph.
 Since the unique layer which changes is the last one, we will preserve all the previous knowledge about the environment
 while learning how to reach the new goal.
 
 
 \section{Montezuma's Revenge}
-% TODO F PODRÍA HACER UN EXPERIMENTO SIN REWARD SHAPING PERO CAMBIANDO DE SUBTREE A VER QUE SALE
+% TODO F PODRÍA HACER UN EXPERIMENTO SIN REWARD SHAPING PERO CAMBIANDO DE subgraph A VER QUE SALE
 
 The specific hyperparameters used in this experiment which differ from the general ones are:
 \begin{itemize}
     \item The number of threads in which the algorithms have been parallelized is $32$ in order to speed up the learning
     process.
-    \item Subtrees $K = 4$, one for each option which the algorithm must learn. (just for \ac{MA3C})
+    \item Subgraphs $K = 4$, one for each option which the algorithm must learn. (just for \ac{MA3C})
 \end{itemize}
 
 \begin{figure}[hbtp]
@@ -147,7 +147,7 @@ but they are good enough to show the differences between both algorithms.
 
 As can be seen in \ffref{fig:Montezuma_performance}, the learning process of \ac{MA3C} is faster than \ac{A3C}.
 Even in complex environments as this one is, the main knowledge can be resumed in the first layers and changing the
-subtree is useful to model different subgoals/options.
+subgraph is useful to model different subgoals/options.
 The \ac{MA3C} curve is also less noisy than \ac{A3C}, which means that this algorithm is less susceptible to
 behaviour changes during the learning process.
 
