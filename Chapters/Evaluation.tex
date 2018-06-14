@@ -68,7 +68,7 @@ after reaching that states.
 
 Thanks to the results obtained with Simple States game, we realized that \ac{MA3C} may be better than \ac{A3C} learning
 different policies from two really similar states.
-We decided to test the algorithms in this game (Complex States, \ffref{subsec:ComplexStates}) in order to observe how they
+We decided to test the algorithms in this game (\ffref{subsec:ComplexStates}) in order to observe how they
 behave in environments in which it is mandatory to retrace its steps.
 It is important to mention that in this game there is no hidden checkpoint, so the \ac{MA3C} does not have as much
 ``advantage" as in Simple States.
@@ -116,7 +116,7 @@ while learning how to reach the new goal.
 
 The specific hyperparameters used in this experiment which differ from the general ones are:
 \begin{itemize}
-    \item The number of threads in which the algorithms have been parallelized is $32$ in order to speed up the learning
+    \item The number of threads in which the algorithms have been parallelized is $32$, in order to speed up the learning
     process.
     \item Subgraphs $K = 4$, one for each option which the algorithm must learn. (just for \ac{MA3C})
 \end{itemize}

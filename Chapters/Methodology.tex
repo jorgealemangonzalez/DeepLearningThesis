@@ -8,7 +8,7 @@ We refer to this new algorithm as \acf{MA3C} and in this section it can be found
 both \acp{ANN}: \ac{A3C} and \ac{MA3C}.
 In addition we will explain the \ac{MA3C} algorithm.
 
-They have been developed using tensorflow (\cite{tensorflow2015}), an open source machine learning framework which the authors
+Both have been developed using tensorflow (\cite{tensorflow2015}), an open source machine learning framework which the authors
 of \ac{A3C} and \ac{DQN} are also using (\cite{deepmind_tensorflow}).
 
 \subsection{\acl{A3C}\label{subsec:AlgorithmA3C}}
@@ -70,7 +70,7 @@ The output layer is made up by $K$ copies of the \ac{A3C} output layer, where $K
 different depending on the use case.
 For each of the games we have set $K$ to a different value: with Simple States we have used $K=3$, with Complex States
 $K=2$ and with \ac{MR} $K=4$.
-This value depend on the number of phases (see \ffref{subsec:SimpleStates} , \ffref{subsec:ComplexStates} and \ffref{subsec:MontezumasRevenge}).
+This value depend on the number of phases (see \ffref{sec:Environments}).
 The input layer is also different depending on the game, in the same manner than \ac{A3C}.
 
 The architecture of \ac{MA3C} contains multiple \newconcept{subgraphs} defining different \acl{AC} approaches to the given input state,
@@ -127,7 +127,7 @@ The full modified algorithm is shown in \ffref{alg:MA3C}.
 \label{alg:MA3C}
 \end{algorithm}
 
-\section{Environments}
+\section{Environments\label{sec:Environments}}
 
 In order to demonstrate the capabilities of \ac{MA3C} over \ac{A3C} we have developed two simple environments where the
 weaknesses of the second one come to light.
@@ -161,7 +161,7 @@ This are the different types:
 \end{center}
 \caption[Simple States game]
 {The hero navigating through a hostile environment trying to reach the door. The wall, hero, checkpoint, hidden checkpoint
-and door are represented with the following colors respectively: blue, grey, green, turquoise and violet.}
+and door are represented by the following colors respectively: blue, grey, green, turquoise and violet.}
 \label{fig:SimpleStates}
 \end{figure}
 
@@ -169,11 +169,11 @@ The goal of the hero is to reach the door by passing through the different check
 with any wall, this will give to the hero the maximum score, 2 points.
 The game is organized in three different phases/states, each one having a different objective.
 The first one's objective is to reach the checkpoint,
-of the second one's objective is the hidden checkpoint and the third one's, the door.
+the second one's objective is the hidden checkpoint and third one's, the door.
 The information about the current phase is always available to the player.
 
-In order to solve this game with both \ac{A3C} and \ac{MA3C} algorithms we must model it as a \ac{SMDP} problem,
-describing components of the tuple $\langle\mathcal{S}, \mathcal{A}_s, \mathcal{P}_a(s,s'), \mathcal{R}_a(s,s'), \gamma \rangle$.
+In order to solve this game with both, \ac{A3C} and \ac{MA3C} algorithms, we must model it as a \ac{SMDP} problem,
+describing the components of the tuple $\langle\mathcal{S}, \mathcal{A}_s, \mathcal{P}_a(s,s'), \mathcal{R}_a(s,s'), \gamma \rangle$.
 
 \begin{itemize}
     \item Each states is a pair $s_t = (\mathbf{F}, p)$ where $p \in \{0,1,2\}$ is the phase of the game and
@@ -209,10 +209,10 @@ These are the changes with respect to the Simple States game, the rest remains e
 \begin{itemize}
     \item \newconcept{checkpoint}: The first time that the hero goes through this object he obtains a reward of 1.
     Then he must follow the rest of the path described above to obtain again 1 of score (after the second time he visits the hidden checkpoint).
-    \item \newconcept{hidden checkpoint}: In this game both 2 times that the hero goes through this object
+    \item \newconcept{hidden checkpoint}: In this game both times that the hero goes through this object
     (following the path) receives 1 of score.
-    The first time the checkpoint object enables the reward and the second time the door enables it.
-    \item \newconcept{door}: The first time the hero reach the door it moves to the starting position of the hero (bottom left corner)
+    The first time, the checkpoint object enables the reward and, the second time, the door enables it.
+    \item \newconcept{door}: The first time the hero reaches the door it moves to the starting position of the hero (bottom left corner)
     and gives him 1 of score.
     The second time behaves as in Simple States.
 \end{itemize}
@@ -223,15 +223,15 @@ These are the changes with respect to the Simple States game, the rest remains e
 \end{center}
 \caption[Complex States game]
 {The hero after reaching the door for first time. The wall, hero, checkpoint, hidden checkpoint
-and door are represented with the following colors respectively: blue, grey, green, turquoise and violet.}
+and door are represented by the following colors respectively: blue, grey, green, turquoise and violet.}
 \label{fig:ComplexStates}
 \end{figure}
 
 
 In this game there are only two phases.
-The first one goes from the start until the first time the hero reaches the door.
-The second one finishes the second time it reaches the door.
-As in Simple States the hero must follow the path in order to obtain the rewards and finish the game.
+The first one goes from the start until the first time the hero reaches the door and
+the second one until the second time it reaches the door.
+As in Simple States, the hero must follow the path in order to obtain the rewards and finish the game.
 The information about the current phase is also available to the player.
 
 The \ac{MDP} problem of this game is exactly the same as in Simple States (\ffref{subsec:SimpleStates}).
@@ -367,7 +367,7 @@ This simplifies the game, being really similar to Simple States and Complex Stat
 As far as the agent will learn how to act inside the option, we cannot accurately define $ P_o(s,s') $ and $ R_o(s) $.
 This is because the number of steps $k$ depends on the policy of the option.
 But we can say that options $o_0, o_1$ and $o_2$ have a reward $r_{t+k} = 10$ while $o_3$ has a reward $r_{t+k} = 110$,
-i.e., the score given by the key and by the checkpoint.
+i.e. the score given by the key and by the checkpoint.
 
 The discount factor $\gamma$ is $0.99$.
 

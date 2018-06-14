@@ -1,8 +1,8 @@
 \chapter{Background}
 
 \section{\aclp{RL}}
-\acl{RL} is an area of \acf{ML} that models a problem focusing on maximizing a numerical reward by interacting, in a
-sequential manner, with the environment.
+\acl{RL} is an area of \acf{ML} that models a problem focusing on maximizing a numerical reward by interacting in a
+sequential manner with the environment.
 To achieve this, the agent obtains a representation of the situation of the problem, named \newconcept{state}; then
 selects an \newconcept{action}; interacts with the environment, by applying that action;
 and finally it finds itself a new state while obtaining some \newconcept{reward}.
@@ -71,7 +71,7 @@ also be infinite. If this happens the MDP is named \newconconcept{infinite MDP}.
 
 We have defined the goal of the agent, that is to maximize the total reward obtained in an episode.
 We also said that the agent must learn to reach that goal, but we have not defined yet how the agent
-should select the actions to achieve it.
+should select the actions to achieve his purpose.
 The expected return $R$ must be defined in a way that encourages the agent to learn, so $R$ is some specific function of
 the reward sequence (\cite[Section~7.1]{sutton1998introduction}).
 The simplest way of computing it is just adding all the future rewards.
@@ -79,7 +79,7 @@ The simplest way of computing it is just adding all the future rewards.
     R_t=r_{t+1}+r_{t+2}+r_{t+3}+...+r_T
 \end{equation}
 Where $r_T$ is the reward obtained in some terminal state. In continual tasks the
-time step $T = \infty$ implying that the return, which is what we are trying to maximize, will also be infinite. To avoid this problem we must introduce
+time step $T = \infty$, implying that the return, which is what we are trying to maximize, will also be infinite. To avoid this problem we must introduce
 the \newconcept{discounted return}, which adds in a discount factor $\gamma$. This factor modifies the previous formulation in the following way:
 \begin{equation\label{eq:return}}
     R_t = r_{t+1} + \gamma r_{t+2} + \gamma^2 r_{t+3} + \dots = \sum_{k=0}^\infty\gamma^k r_{t+k+1}
@@ -102,12 +102,12 @@ This concept is called the \newconcept{n-step return} at time $t$, and its gener
 Sometimes an agent is not ``smart" enough to reach the environment rewards. In this scenario some new rewards can be added to guide the agent towards the original rewards.
 
 Specifically, applying reward shaping to a \ac{MDP} (\cite{ng1999policy}) is to modify its reward function $\mathcal{R}_a(s,s')$ getting a
-new one $\mathcal{R'}_a(s,s')$, the difference between them is defined by the
-\newconcept{shaping reward function}. More formally
+new one $\mathcal{R'}_a(s,s')$.
+The difference between them is defined by the \newconcept{shaping reward function}, more formally
 $\mathcal{R'}_a(s,s') = \mathcal{R}_a(s,s') + \mathcal{F}(s,a,s')$ where
 $\mathcal{F} : \mathcal{S} \times \mathcal{A} \times \mathcal{S} \rightarrow \Re$ is a bounded real-valued function.
 
-The function $\mathcal{F}$ should be chosen using expert knowledge about the domain or in a general manner that works for any MDP.
+The function $\mathcal{F}$ must be chosen using expert knowledge about the domain or in a general manner that works for any MDP.
 This choice should be made carefully, because the modification of the MDP rewards should guide the agent to reach the
 same optimal policy $\pi^*$ (\ffref{subsec:policy}) and not another policy which is suboptimal for the original problem.
 To guarantee consistency with the optimal policy, $\mathcal{F}$ must be \newconcept{potential-based}.
@@ -116,11 +116,12 @@ $\phi : \mathcal{S} \rightarrow \Re$ such that for all $s \in \mathcal{S} \setmi
 \begin{equation}
     \mathcal{F}(s, a, s') = \gamma \phi(s') - \phi(s)
 \end{equation}
-By defining $\mathcal{F}$ in this way we can ensure that the reward shaping is robust, near-optimal policies in the original \ac{MDP} remain near-optimal in the new \ac{MDP}.
+By defining $\mathcal{F}$ in this way we can ensure that the reward shaping is robust, i.e. near-optimal policies in the original \ac{MDP} remain near-optimal in the new \ac{MDP}.
 
 \subsection{Policy\label{subsec:policy}}
 
-As described by \citeauthor*[Section~1.3]{sutton1998introduction}, a policy $\pi$ defines the learning agent’s way of behaving at a given time. It selects the action, given the environment state. During the learning process of the agent its policy may vary multiple times, looking for the best mapping of state-action pairs that fits the problem. This is called the optimal policy $\pi^*$ and the objective of any reinforcement learning algorithm is to approximate its policy to the optimal policy.
+As described by \citeauthor*[Section~1.3]{sutton1998introduction}, a policy $\pi$ defines the learning agent’s way of behaving at a given time.
+It selects the action according to the given environment state. During the learning process of the agent its policy may vary multiple times, looking for the best mapping of state-action pairs that fits the problem. This is called the optimal policy $\pi^*$ and the objective of any reinforcement learning algorithm is to approximate its policy to the optimal policy.
 
 In most cases the policy is a probability distribution over the actions that can be choosed in some state $s$. Is denoted as $\pi(a,s)$ where $s$ belongs to the state space and $a$ to the action space, fulfilling the following condition:
 \begin{equation}
@@ -130,7 +131,9 @@ The action selected to apply to the environment is randomly selected with this p
 
 \subsection{Value functions\label{subsec:value_func}}
 
-As described by \citeauthor*[Section~3.7]{sutton1998introduction}, the \newconcept{value function} is an estimate of how good it is for the agent to be in a given state. It uses the expected return to create value functions that depends on future rewards which the agent will obtain. This value will be used by the agent to choose the action. More formally, the value is the expected return for an agent that follows policy $\pi$ from state $s$.
+As described by \citeauthor*[Section~3.7]{sutton1998introduction}, the \newconcept{value function} is an estimate of how good it is for the agent to be in a given state.
+It uses the expected return to create value functions that depend on future rewards which the agent will obtain.
+This value is used by the agent to choose the action. More formally, the value is the expected return for an agent that follows policy $\pi$ from state $s$.
 \begin{equation}
     V^\pi(s) = E_\pi \lbrace R_t | s_t = s \rbrace =
     E_\pi \left\{ \left. \sum_{k=0}^\infty \gamma^kr_{t+k+1} \right| s_t = s \right\}
@@ -153,7 +156,7 @@ Both $V$ and $Q$ are useful values that the algorithm will learn from experience
 \end{equation}
 Where $\mathcal{S}$ is the state space of the environment.
 
-So we can define $V^*$ and $Q^*$ as the value function and \newconcept{action value function} respectively.
+So we can define $V^*$ and $Q^*$ as the \newconcept{value function} and \newconcept{action value function} respectively
 that give us the expected return of following the optimal policy $\pi^*$.
 
 \subsection{Q-learning\label{subsec:Qlearn}}
@@ -163,7 +166,7 @@ that give us the expected return of following the optimal policy $\pi^*$.
 \end{equation}
 \citep[Section~6.5]{sutton1998introduction}
 
-Where $\alpha$ is a constant step-size parameter that controls how fast the $Q(s_t, a_t)$ value change. Note that the $Q$ value is being updated based on rewards and the max $Q$ of all actions in $s_{t+1}$, which makes that in the long term $Q$ converges to $Q^*$. It is also important that this updates does not depend on the policy followed so it will converge even in the case a random action selection is being used. The only imperative is to visit all state-action pairs continually to make several updates of each $Q$ value and continually improve its approximation to $Q^*$.
+Where $\alpha$ is a constant step-size parameter that controls how fast the $Q(s_t, a_t)$ value change. Note that the $Q$ value is being updated based on rewards and the max $Q$ of all actions in $s_{t+1}$, which makes that, in the long term, $Q$ converges to $Q^*$. It is also important that this updates do not depend on the policy followed so it will converge even in the case a random action selection is being used. The only imperative is to visit all state-action pairs continually to make several updates of each $Q$ value and continually improve its approximation to $Q^*$.
 
 There is a more general version of this algorithm called \newconcept{n-step Q-learning} which instead of using the reward and $Q$ value of the next state $t+1$ it updates taking into account $t+n-1$ rewards and the maximum $t+n$ $Q$ value.
 \begin{equation}
@@ -176,7 +179,7 @@ It is a different representation of the agent-environment interface where the ag
 functions.
 The \newconcept{actor} is the one that selects the actions ( policy function does this ) and the
 \newconcept{critic} criticizes the actions taken by the actor ( value function does this ). The value function
-determines how good is a state in terms of future rewards and the states is determined by the actions taken following the policy.
+determines how good is a state in terms of future rewards and the states are determined by the actions taken following the policy.
 
 \begin{figure}[hbtp]
 \begin{center}
@@ -195,14 +198,15 @@ More formally:
 \begin{equation}
     \delta_t=r_{t+1}+\gamma V(s_{t+1})-V(s_t)
 \end{equation}
-By minimizing this error $\delta_t$ the policy will trend to the optimal policy.
+By minimizing the error $\delta_t$ the policy will trend to the optimal policy.
 The value function will also approximate more precisely future return values.
 
 
 \subsection{\aclp{SMDP}\label{subsec:SMDP}}
 
 A \ac{SMDP} is a framework for \newconcept{hierarchical reinforcement learning} in which actions are not atomic, in the sense that they
-do not last for just one time step, can be composed by several smaller actions and make decisions based on several states.
+do not last for just one time step.
+They can be composed by several smaller actions and make decisions based on several states.
 
 A common formalism for representing complex actions is the options framework.
 An option can be expressed as a tuple $\langle \mathcal{I}, \pi, \beta \rangle$ where
@@ -213,16 +217,17 @@ More formally, a Markov option is made up by:
 \begin{itemize}
     \item $\mathcal{I} \subseteq \mathcal{S}$ where $\mathcal{S}$ is the set of states
     \item $\pi : \mathcal{S} \times \mathcal{A} \rightarrow [0,1]$ where $\mathcal{A}$ is the set of available actions
-    during the option, it can also contain other options.
+    during the option ( it can also contain other options ).
     \item $\beta : \mathcal{S} \rightarrow [0,1]$
 \end{itemize}
 Since an option can be composed by several actions or other options, and each action lasts one time step, an
 option may last more time steps.
 
 %TODO F QUITAR ESTO SI NO LO USO
-With Markov options the interrupt decision is made on the current state $s_t$ but sometimes we may want to end an option if
+With Markov options the interrupt decision is based on the current state $s_t$ but sometimes we may want to end an option if
 some specific amount of time has elapsed.
-For this purpose semi-Markov options were created, they use the history of
+For this purpose semi-Markov options were created.
+They use the history of
 states and actions taken in that option to select the next action and the end condition.
 So in both $\pi$ and $\beta$ instead of
 using $\mathcal{S}$ it uses $\Omega$ which is the set of all histories $h_{t\tau}$ defined as follows:
@@ -307,7 +312,7 @@ It is characterized by having an input layer, several hidden layers and an outpu
 The input layer is a set of neurons whose inputs are not connected to other neurons and whose outputs are connected to
 the first hidden layer.
 Each of the hidden layers satisfies that the output of neurons in layer $i$ is the input of some neurons in layer $i+1$,
-except the last hidden layer that is connected with the output layer.
+except the last hidden layer which is connected with the output layer.
 The output layer is a set of neurons whose results form the output signal of the network.
 When each neuron has as input all neurons of previous layer the network is named fully connected.
 
@@ -336,7 +341,8 @@ I order to accomplish this purpose different gradient descent algorithms might b
 The speed with which the parameters change is controlled by a fixed hyperparameter called the \newconcept{learning rate}.
 
 Fully connected layers are the most computationally expensive to train because of the amount of connexions and variables.
-One way of reducing complexity is to use \newconcept{shared weights}, instead of having different weights for each input of each neuron,
+One way of reducing complexity is to use \newconcept{shared weights}.
+Instead of having different weights for each input of each neuron,
 some part of the weights of a neuron are reused to be multiplied for the input of another neurons.
 This reduces the number of variables the network should maintain and update, but the number of mathematical computations
 will be the same.
@@ -357,7 +363,7 @@ For example, if we want to recognize dogs inside images, we could use some exist
 then adapt its weights.
 
 Another method is to train our network in a general problem related to the target task to later focus on it.
-With \acfl{DNN} we could train a large network on some task and then reuse just the first layers, that should
+With \acfp{DNN} we could train a large network on some task and then reuse just the first layers, which should
 contain a basic feature extraction about the problem.
 In the previous example we could take the layers of the network responsible of recognizing shapes and add some new nodes
 to train on recognizing dogs.
@@ -372,47 +378,48 @@ In the last years this technique has become really popular as a consequence of i
 \subsection{\acl{CNN} \label{subsec:CNN}}
 
 This network is a variation of the multilayer perceptron specifically designed to recognize visual patterns.
-They are usually made up of four different types of layers: \newconcept{convolutional layers}, \newconcept{\acfl{ReLU} layers},
-\newconcept{pooling layers} and fully connected layers.
+They are usually made up by four different types of layers: \newconcept{convolutional layers}, \newconcept{\acfl{ReLU} layers},
+\newconcept{pooling layers} and \newconcept{fully connected layers}.
 
 Convolutional layers apply a convolution to some previous layer, characterized by a filter.
 Each node defines its connections based on the filter and their position. The filter is made up by \newconcept{kernel size},
 \newconcept{stride}, \newconcept{padding} and \newconcept{values}.
-The kernel size defines the shape and amount of nodes of the previous layer that are connected to a convolutional layer node.
-The stride defines how the kernel moves across the previous layer, with each move, the filter is applied to some group of
+The kernel size defines the shape and amount of nodes from the previous layer which are connected to a single convolutional layer node.
+The stride defines how the kernel moves across the previous layer.
+With each move the filter is applied to some group of
 nodes by connecting them to a new node of the convolutional layer.
 The padding (specifically zero padding) is the amount of zeros to add around the border of each dimension in the previous
-layer, this helps to preserve as much information about the previous layer values.
+layer, this helps to preserve as much information as possible about the previous layer values.
 Finally, the values define the weights for each input signal in each neuron.
-These are the same values for each convolutional layer node.
+The same weights are applied to every node in the same kernel position inside the convolutional layer.
 This concept is named \newconcept{shared weights} and minimizes the amount
 of variables the \ac{ANN} has to retain and update.
 
 \ac{ReLU} layers increases the nonlinear properties of the model by applying the function $f(x)=max(0,x)$ to all outputs of the previous layer.
 It is common practice to apply this layer after convolutional layers.
-Applying \ac{ReLU} functions mitigates the \newconcept{vanishing gradient problem}, which is characterized of an exponential
+Applying \ac{ReLU} functions mitigates the \newconcept{vanishing gradient problem}, which is characterized by an exponential
 reduction of the gradient through the layers.
 
 Pooling layers generate a downsampled version of the previous layer.
 It applies some function ( usually a max function ) to a group of outputs of the previous layer and saves the result in
 just one node of the pooling layer.
-This technique reduces the parameters of the network which decrease the memory and calculations needed, it also reduces overfitting.
+This technique reduces the parameters of the network decreasing the memory and calculations needed, it also reduces overfitting.
 
 \subsection{\acl{DQN}}
 This algorithm was introduced by \citeauthor{mnih2015human} in \citetitle{mnih2015human} (\citeyear{mnih2015human}).
 
-A \acl{DQN}, from now on \ac{DQN}, is a deep convolutional neural network designed to approximate Q values of reinforcement learning.
+A \acl{DQN}, from now on \ac{DQN}, is a deep \acf{CNN} designed to approximate Q values of reinforcement learning.
 This agent learns from images to approximate the optimal action-value function (\ffref{subsec:Qlearn}).
 The aim of \acp{DQN} is to learn successful policies directly from images of some given problem, for example, a game.
-For that purpose the output of the network will be the Q values of each action given some input state.
+For that purpose, the output of the network will be the Q values of each action given some input state.
 
-Bear in mind that when using \acp{ANN} in reinforcement learning the learning problem can become unstable or even diverge.
-This is caused by the weight updates, that changes not only the result of som action-value pair but all of the action-value associations;
-the correlation present in sequence of observations;
+Bear in mind that, when using \acp{ANN} in reinforcement learning, the learning problem can become unstable or even diverge.
+This is caused by the weight updates, which change not only the result of some specific action-value pair but all of the action-value associations;
+the correlation present in a sequence of observations;
 and the correlations between the action-values and target values.
 For that reason, apart from the \ac{ANN}, they used an experience replay ($E$).
 This structure saves last $T$ states which the environment has gone by in the format $e_t=(s_t, a_t, r_t, s_{t+1})$.
-Then it picks in an uniformly random manner from this set to train the network.
+Then the algorithm picks in an uniformly random manner from this set to train the network.
 Training on independent and identically distributed samples helps reducing the instability generated by the \ac{ANN}.
 
 Q-learning updates are organized in iterations, containing several training steps.
@@ -423,7 +430,7 @@ They defined the loss function in the following way:
 \begin{equation}
     L_i(\theta_i)=E_{(s,a,r,s') \sim U(D))} \left [ \bigg(r+\gamma \max_{a'}Q(s',a';\theta_i^-)-Q(s,a;\theta_i)\bigg )^2\right ]
 \end{equation}
-Where $\theta_i$ and $\theta^-_i$ are the wights of two \acp{ANN} with the same architecture.
+Where $\theta_i$ and $\theta^-_i$ are the weights of two \acp{ANN} with the same architecture.
 $\theta_i$ is updated each training step while $\theta^-_i$ only change when the iteration finish, following
 $\theta_i = \theta^-_i$ after this happens.
 
